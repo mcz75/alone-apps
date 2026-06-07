@@ -207,32 +207,36 @@
     "word": "Mahngebuehr",
     "lang": "DE",
     "date": "2026-06-06",
-    "pronunciation": "/MAHn-geh-byur/",
-    "definition": "",
-    "examples": []
+    "pronunciation": "MAH-n-geh-byur",
+    "definition": "die Mahngebuhr (Plural: die Mahngebuhren) — eine Gebuhr, die anfallt, wenn eine Rechnung zu spat bezahlt wird. Zusammensetzung:",
+    "examples": [
+      "Ich habe eine Mahngebuhr gezahlt, weil ich zu spat bezahlt habe."
+    ]
   },
   {
     "word": "Mahnung",
     "lang": "DE",
     "date": "2026-06-06",
-    "pronunciation": "/MAHnung/",
-    "definition": "",
+    "pronunciation": "MAH-nung",
+    "definition": "die Mahnung (Plural: die Mahnungen) — eine Erinnerung oder Warnung, dass etwas getan werden muss; im formellen Kontext oft eine Zahlungserinnerung. Verwandte Worter:",
     "examples": []
   },
   {
     "word": "erklaeren",
     "lang": "DE",
     "date": "2026-06-06",
-    "pronunciation": "/erklEHren/",
-    "definition": "",
+    "pronunciation": "air-KLAIR-en",
+    "definition": "erklaren ist ein regelmasiges Verb: ich erklare, du erklarst, er erklart, wir erklaren. Imperativ: erklare!",
     "examples": []
   },
   {
     "word": "hinzufuegen",
     "lang": "DE",
     "date": "2026-06-06",
-    "pronunciation": "/HIN-tsoo-fyoo-gen/",
-    "definition": "",
-    "examples": []
+    "pronunciation": "HIN-tsoo-fyoo-gen",
+    "definition": "hinzufugen ist ein trennbares Verb: ich fuge hinzu, du fugst hinzu, er fugt hinzu. Imperativ: fuge hinzu!",
+    "examples": [
+      "- Ich fuge das Vokabular zum Repository hinzu."
+    ]
   }
 ]
