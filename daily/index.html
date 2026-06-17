@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>alone — daily · 2026-06-17</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0e0c;
+      --bg2: #131210;
+      --ink: #f5f0e8;
+      --ink-dim: #6b6760;
+      --ink-dimmer: #3d3a35;
+      --accent: #c8a96e;
+      --accent-dim: #6b5a38;
+      --border: #2a2925;
+      --section-rule: #1e1d19;
+      --rail-inactive: #2a2925;
+      --parchment: #f5f0e8;
+      --parchment-ink: #1a1915;
+      --parchment-dim: #6b5a38;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'IBM Plex Mono', monospace;
+      min-height: 100vh;
+      padding: 0 0 6rem 0;
+    }
+
+    /* ── READING RAIL ── */
+    .rail {
+      position: fixed;
+      left: max(1.5rem, calc(50% - 380px));
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      z-index: 100;
+    }
+    .rail-line {
+      width: 1px;
+      flex: 1;
+      min-height: 28px;
+      background: var(--rail-inactive);
+      transition: background 0.4s;
+    }
+    .rail-line.active { background: var(--accent); }
+    .rail-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--rail-inactive);
+      border: 1px solid var(--rail-inactive);
+      flex-shrink: 0;
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+    .rail-dot.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 6px var(--accent-dim);
+    }
+    .rail-dot::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-dimmer);
+      white-space: nowrap;
+      transition: color 0.3s;
+    }
+    .rail-dot.active::after { color: var(--accent); }
+
+    @media (max-width: 800px) { .rail { display: none; } }
+
+    /* ── LAYOUT ── */
+    .page {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 0 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+    .logo em { font-style: italic; }
+    .issue-meta {
+      font-size: 0.65rem;
+      color: var(--ink-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTION SHELL ── */
+    .section {
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--section-rule);
+    }
+    .section:last-child { border-bottom: none; }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .eyebrow-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .eyebrow-time {
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-dimmer);
+    }
+    .eyebrow-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .body-text {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: #d8d2c8;
+    }
+    .body-text p + p { margin-top: 0.9em; }
+
+    /* ── PULSE SECTION ── */
+    .pulse-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .pulse-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 0.9rem 1rem;
+    }
+    .pulse-key {
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      margin-bottom: 0.3rem;
+    }
+    .pulse-value {
+      font-size: 1rem;
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .pulse-value.good { color: #7ab87a; }
+    .pulse-value.caution { color: #c8a96e; }
+
+    .intentions {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .intentions li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .intentions li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 0.05em;
+    }
+
+    /* ── BERLIN SECTION ── */
+    .news-item {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .news-item:last-child { margin-bottom: 0; }
+    .news-tag {
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+      margin-bottom: 0.35rem;
+    }
+    .news-text {
+      font-size: 0.87rem;
+      line-height: 1.65;
+      color: #c8c2b8;
+    }
+
+    /* ── WORD SECTION ── */
+    .word-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 1.75rem;
+    }
+    .word-display {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .word-pos {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-dim);
+      margin-bottom: 1.25rem;
+    }
+    .word-definition {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: #c8c2b8;
+      margin-bottom: 1.25rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+    .word-examples {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .word-example {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--ink-dim);
+      font-style: italic;
+    }
+    .word-example::before { content: '— '; color: var(--accent-dim); }
+    .word-in-context {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--accent);
+      line-height: 1.6;
+    }
+    .word-in-context-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    /* ── COACH SECTION ── */
+    .coach-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+    }
+    .coach-before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      margin-bottom: 1.25rem;
+    }
+    .coach-ba-col {
+      background: var(--bg2);
+      padding: 1rem;
+    }
+    .coach-ba-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-dimmer);
+      margin-bottom: 0.5rem;
+    }
+    .coach-ba-text {
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .coach-ba-text.wrong { color: #b87a7a; text-decoration: line-through; text-decoration-color: #7a3a3a; }
+    .coach-ba-text.right { color: #7ab87a; }
+    .coach-rule {
+      font-size: 0.83rem;
+      line-height: 1.7;
+      color: #c8c2b8;
+      margin-bottom: 1rem;
+    }
+    .coach-hook {
+      font-size: 0.75rem;
+      color: var(--accent-dim);
+      font-style: italic;
+      border-left: 2px solid var(--accent-dim);
+      padding-left: 0.75rem;
+      line-height: 1.6;
+    }
+
+    /* ── GERMAN SECTION ── */
+    .german-phrase {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-style: italic;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    .german-translation {
+      font-size: 0.78rem;
+      color: var(--ink-dim);
+      letter-spacing: 0.06em;
+      margin-bottom: 1.25rem;
+    }
+    .german-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .german-part {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+    .german-part-word {
+      color: var(--accent);
+      min-width: 140px;
+      flex-shrink: 0;
+    }
+    .german-part-note { color: var(--ink-dim); }
+    .german-use {
+      font-size: 0.82rem;
+      color: #c8c2b8;
+      line-height: 1.65;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    /* ── READ SECTION (parchment flip) ── */
+    .read-section {
+      background: var(--parchment);
+      color: var(--parchment-ink);
+      margin: 0 -1.5rem;
+      padding: 2.5rem 1.5rem;
+    }
+    .read-section .eyebrow-label { color: var(--parchment-dim); }
+    .read-section .eyebrow-time { color: #b0a898; }
+    .read-section .eyebrow-rule { background: #d0c9b8; }
+    .read-section .section-title { color: var(--parchment-ink); }
+    .read-section .read-subtitle {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--parchment-dim);
+      margin-bottom: 1.5rem;
+    }
+    .read-body {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      line-height: 1.85;
+      color: #2a2520;
+    }
+    .read-body p + p { margin-top: 1em; }
+    .read-body em { color: var(--parchment-dim); }
+
+    /* ── DEEPER SECTION ── */
+    .deeper-block {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent-dim);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .deeper-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+      margin-bottom: 0.6rem;
+    }
+    .deeper-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      color: var(--ink);
+    }
+    .deeper-body {
+      font-size: 0.85rem;
+      line-height: 1.72;
+      color: #c8c2b8;
+    }
+    .deeper-body p + p { margin-top: 0.75em; }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 0;
+      font-size: 0.62rem;
+      color: var(--ink-dimmer);
+      letter-spacing: 0.08em;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+<!-- READING RAIL -->
+<nav class="rail" id="rail">
+  <div class="rail-dot active" data-label="pulse" data-section="s-pulse" onclick="scrollTo('s-pulse')"></div>
+  <div class="rail-line" id="rl-1"></div>
+  <div class="rail-dot" data-label="mind" data-section="s-mind" onclick="scrollTo('s-mind')"></div>
+  <div class="rail-line" id="rl-2"></div>
+  <div class="rail-dot" data-label="berlin" data-section="s-berlin" onclick="scrollTo('s-berlin')"></div>
+  <div class="rail-line" id="rl-3"></div>
+  <div class="rail-dot" data-label="word" data-section="s-word" onclick="scrollTo('s-word')"></div>
+  <div class="rail-line" id="rl-4"></div>
+  <div class="rail-dot" data-label="coach" data-section="s-coach" onclick="scrollTo('s-coach')"></div>
+  <div class="rail-line" id="rl-5"></div>
+  <div class="rail-dot" data-label="german" data-section="s-german" onclick="scrollTo('s-german')"></div>
+  <div class="rail-line" id="rl-6"></div>
+  <div class="rail-dot" data-label="read" data-section="s-read" onclick="scrollTo('s-read')"></div>
+  <div class="rail-line" id="rl-7"></div>
+  <div class="rail-dot" data-label="deeper" data-section="s-deeper" onclick="scrollTo('s-deeper')"></div>
+  <div class="rail-line" id="rl-8"></div>
+  <div class="rail-dot" data-label="steel" data-section="s-steel" onclick="scrollTo('s-steel')" style="background:#3d5555;border-color:#3d5555;"></div>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="logo"><em>alone</em> — daily</div>
+    <div class="issue-meta">Wednesday · 17 June 2026</div>
+  </header>
+
+  <!-- 1. PULSE -->
+  <section class="section" id="s-pulse">
+    <div class="eyebrow">
+      <span class="eyebrow-label">Pulse</span>
+      <span class="eyebrow-time">2 min</span>
+      <div class="eyebrow-rule"></div>
+    </div>
+
+    <div class="pulse-grid">
+      <div class="pulse-item">
+        <div class="pulse-key">Blood pressure</div>
+        <div class="pulse-value caution">126 / 86</div>
+      </div>
+      <div class="pulse-item">
+        <div class="pulse-key">Weather · Berlin</div>
+        <div class="pulse-value">11°C → 25°C</div>
+      </div>
+      <div class="pulse-item">
+        <div class="pulse-key">Sport</div>
+        <div class="pulse-value good">CrossFit 6 am ✓</div>
+      </div>
+      <div class="pulse-item">
+        <div class="pulse-key">Day type</div>
+        <div class="pulse-value">Execution</div>
+      </div>
+    </div>
+
+    <ul class="intentions">
+      <li>Photograph everything you eat today — validate the food logging habit before it becomes an assumption</li>
+      <li>Book an appointment at Hausarztpraxis Moabit (Doctolib) and sit or register for the Goethe Institut Einstufungstest</li>
+      <li>Keep things lean — close one open loop today, open none</li>
+    </ul>
+  </section>
+
+  <!-- 2. MIND -->
+  <section class="section" id="s-mind">
+    <div class="eyebrow">
+      <span class="eyebrow-label">On your mind</span>
+      <span class="eyebrow-time">5 min</span>
+      <div class="eyebrow-rule"></div>
+    </div>
+    <h2 class="section-title">Same bowl, different day</h2>
+    <div class="body-text">
+      <p>This morning you cooked the same meal you cooked yesterday — rice, lentils, vegetables, tofu — and you noticed it. Not with irritation but with something closer to appreciation. The sameness is the point. Every decision you don't have to make before 6 am is energy banked for something that actually needs deciding.</p>
+      <p>The food photography plan is clever in a way that goes beyond calorie counting. A photograph is a commitment to honesty. You can approximate in your head, but the image doesn't negotiate. If what you ate was small, the plate looks small. If it was large, the plate looks large. You're building a mirror, not a record.</p>
+      <p>The lean principle you wrote about this morning extends further than meals and chaos. It's a stance toward all accumulation: nothing open without a reason, nothing held without intent. You said it well — the goal isn't to sort chaos but to refuse to generate new chaos while sorting the existing kind. That distinction matters. Most tidying creates more mess before it creates less.</p>
+    </div>
+  </section>
+
+  <!-- 3. BERLIN -->
+  <section class="section" id="s-berlin">
+    <div class="eyebrow">
+      <span class="eyebrow-label">Berlin today</span>
+      <span class="eyebrow-time">5 min</span>
+      <div class="eyebrow-rule"></div>
+    </div>
+    <h2 class="section-title">The city this morning</h2>
+
+    <div class="news-item">
+      <div class="news-tag">Transit</div>
+      <div class="news-text">The new S15 line begins running every 10 minutes between Gesundbrunnen and the Hauptbahnhof from mid-June — shorter journey times for anyone crossing the north of the city. If that's on your route, it's worth knowing.</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-tag">History · today</div>
+      <div class="news-text">Today is June 17 — the anniversary of the 1953 East German uprising. More than fifty people died. Berlin's mayor paid tribute this morning. The street you know as Straße des 17. Juni is named for this day. You walk past the history every time you go to the Tiergarten.</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-tag">Weather</div>
+      <div class="news-text">Currently 11°C and cloudy, rising to 25°C by afternoon. Solstice is Saturday — you're getting close to the longest day, when it stays light until nearly 22:30. Summer in Berlin is arriving. Use the evenings.</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-tag">Coming up</div>
+      <div class="news-text">Kreuzberg Festival runs 26–28 June on Bergmannstraße — music, street food, long nights. Worth keeping in the calendar if you want to be somewhere that isn't your desk next weekend.</div>
+    </div>
+  </section>
+
+  <!-- 4. WORD -->
+  <section class="section" id="s-word">
+    <div class="eyebrow">
+      <span class="eyebrow-label">Word</span>
+      <span class="eyebrow-time">10 min</span>
+      <div class="eyebrow-rule"></div>
+    </div>
+    <h2 class="section-title">Today's word</h2>
+    <div class="word-card">
+      <div class="word-display">wrap up</div>
+      <div class="word-pos">phrasal verb &amp; noun phrase · B2 · informal to neutral</div>
+      <div class="word-definition">
+        As a verb: to finish or conclude something — a meeting, a session, a task — with the sense of bringing loose ends together before closing. As a noun (<em>a wrap-up</em>): a summary or conclusion. Common collocations: <em>wrap up a meeting</em>, <em>wrap up a deal</em>, <em>wrap up the day</em>.
+      </div>
+      <div class="word-examples">
+        <div class="word-example">Let's wrap up for today — we've covered everything on the list.</div>
+        <div class="word-example">She sent a wrap-up email after the call so no one forgot the decisions.</div>
+        <div class="word-example">They wrapped up the project two days ahead of schedule.</div>
+      </div>
+      <div class="word-in-context">
+        <div class="word-in-context-label">In your life</div>
+        You used this word to close today's morning session — correctly, naturally, as a verb. "Wrap up" is now part of your active vocabulary. The alone ritual has a name.
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. COACH -->
+  <section class="section" id="s-coach">
+    <div class="eyebrow">
+      <span class="eyebrow-label">Coach</span>
+      <span class="eyebrow-time">10 min</span>
+      <div class="eyebrow-rule"></div>
+    </div>
+    <h2 class="section-title">Pattern to carry</h2>
+    <div class="coach-card">
+      <div class="coach-before-after">
+        <div class="coach-ba-col">
+          <div class="coach-ba-label">What you wrote</div>
+          <div class="coach-ba-text wrong">Ich freue mich für heute</div>
+        </div>
+        <div class="coach-ba-col">
+          <div class="coach-ba-label">What it should be</div>
+          <div class="coach-ba-text right">Ich freue mich auf heute</div>
+        </div>
+      </div>
+      <div class="coach-rule">
+        <strong style="color:var(--ink)">sich freuen</strong> takes different prepositions depending on time direction.<br><br>
+        <strong style="color:#7ab87a">freuen + auf</strong> (+ Akkusativ) = looking forward to something <em>in the future</em><br>
+        <strong style="color:#7ab87a">freuen + über</strong> (+ Akkusativ) = pleased about something <em>that already happened</em><br><br>
+        "Ich freue mich auf das CrossFit heute" → still in the future, use <em>auf</em>.<br>
+        "Ich freue mich über mein CrossFit-Training heute" → it's done, you're happy about it, use <em>über</em>.
+      </div>
+      <div class="coach-hook">
+        Memory hook: <em>auf</em> points forward like an arrow → anticipation. <em>über</em> looks back from above → reflection. The preposition tells you which direction you're facing.
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. GERMAN MINUTE -->
+  <section class="section" id="s-german">
+    <div class="eyebrow">
+      <span class="eyebrow-label">German minute</span>
+      <span class="eyebrow-time">10 min</span>
+      <div class="eyebrow-rule"></div>
+    </div>
+    <h2 class="section-title">Phrase of the day</h2>
+
+    <div class="german-phrase">Ich bereite mich vor.</div>
+    <div class="german-translation">I am preparing myself. / I am getting ready.</div>
+
+    <div class="german-breakdown">
+      <div class="german-part">
+        <span class="german-part-word">sich vorbereiten</span>
+        <span class="german-part-note">separable verb — prefix <em>vor-</em> goes to the end of the clause</span>
+      </div>
+      <div class="german-part">
+        <span class="german-part-word">ich bereite … vor</span>
+        <span class="german-part-note">present tense, first person</span>
+      </div>
+      <div class="german-part">
+        <span class="german-part-word">mich</span>
+        <span class="german-part-note">reflexive pronoun (Akkusativ) — refers back to the subject</span>
+      </div>
+    </div>
+
+    <div class="german-use">
+      This morning you wrote <em>forbereite is fur CrossFit</em> — three errors in four words. The corrected form is <strong>bereite es für CrossFit vor</strong>. But the reflexive form is what you'll actually say most often: <em>Ich bereite mich auf das CrossFit vor</em> — I'm getting ready for CrossFit. Note how <em>auf</em> appears again. Separable verbs and reflexive pronouns are the two most common stumbling points at A2/B1. Today you saw both in one sentence. That's efficient.
+    </div>
+  </section>
+
+</div><!-- end .page -->
+
+<!-- 7. READ — parchment flip -->
+<div class="read-section" id="s-read">
+  <div class="page">
+    <div class="eyebrow">
+      <span class="eyebrow-label">Read</span>
+      <span class="eyebrow-time">20 min</span>
+      <div class="eyebrow-rule" style="background:#d0c9b8"></div>
+    </div>
+    <h2 class="section-title" style="color:#1a1915">The discipline of the identical meal</h2>
+    <div class="read-subtitle">On decision fatigue, food monotony, and the quiet intelligence of habits</div>
+    <div class="read-body">
+      <p>Barack Obama wore the same style of suit every day. Mark Zuckerberg rotates through identical grey t-shirts. Steve Jobs had his turtlenecks. The explanation they each gave was variations on the same idea: too many decisions are already waiting. Don't spend one on clothing.</p>
+      <p>This principle has a name in psychology — <em>decision fatigue</em> — and it describes something real. The self-control and judgment you bring to a problem at 9 am is not the same resource you bring at 4 pm. It depletes. Every choice you make, however trivial, draws slightly from the same reserve. The person who decides what to eat for breakfast, what to wear, which route to take, what music to listen to, and what to reply to their first email has spent something before their actual work has begun.</p>
+      <p>The identical meal is a small act of architectural intelligence. You're not eating rice and lentils and tofu because you lack imagination. You're eating them because the decision has already been made — it was made once, in a calm moment, with attention — and now it doesn't need to be made again. The cognitive overhead of feeding yourself has been compressed to near zero. You show up to CrossFit at 6 am with the same resources you would have had if you'd woken at noon.</p>
+      <p>There's a subtler benefit that gets less attention. The identical meal is also a sensory anchor. When you eat the same thing repeatedly, you stop <em>deciding</em> and start <em>noticing</em>. The lentils taste different depending on your state. You begin to read yourself through the food rather than through the food itself. Athletes use this deliberately. A recovery meal that's the same every time becomes a biofeedback tool: if it tastes flat, something is off. If it tastes good, you're ready.</p>
+      <p>The food photography project you started adds another layer. The camera doesn't lie about portion size, about the colour of vegetables slightly past their best, about the quantity of oil. What the photograph documents is not just what you ate but what you chose to show yourself about what you ate. Over weeks, the images become a different kind of self-portrait — one built from plates rather than faces, from choices rather than expressions.</p>
+      <p>The lean principle, as you put it this morning, is about not generating new chaos while sorting existing chaos. The identical meal is lean by design. It generates no new complexity, requires no new decision, and accumulates no new debt. In a morning already full of intention, that's not a small thing. That's the foundation that makes everything else possible.</p>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- 8. DEEPER -->
+  <section class="section" id="s-deeper">
+    <div class="eyebrow">
+      <span class="eyebrow-label">Deeper</span>
+      <span class="eyebrow-time">30 min</span>
+      <div class="eyebrow-rule"></div>
+    </div>
+    <h2 class="section-title">If you have more time</h2>
+
+    <div class="deeper-block">
+      <div class="deeper-label">Mini-lesson · German · Separable verbs</div>
+      <div class="deeper-title">The 8 most useful separable verbs for daily life</div>
+      <div class="deeper-body">
+        <p>Today you met <em>vorbereiten</em>. Separable verbs are common in German — the prefix detaches and moves to the end of the clause. Here are eight you'll use every week:</p>
+        <p><strong style="color:#c8a96e">aufwachen</strong> — to wake up → <em>Ich wache um 5 Uhr auf.</em><br>
+        <strong style="color:#c8a96e">anfangen</strong> — to start → <em>Wann fängst du an?</em><br>
+        <strong style="color:#c8a96e">vorbereiten</strong> — to prepare → <em>Ich bereite mich vor.</em><br>
+        <strong style="color:#c8a96e">anrufen</strong> — to call (phone) → <em>Ich rufe dich an.</em><br>
+        <strong style="color:#c8a96e">abholen</strong> — to pick up → <em>Ich hole dich ab.</em><br>
+        <strong style="color:#c8a96e">aufhören</strong> — to stop/quit → <em>Hör auf!</em><br>
+        <strong style="color:#c8a96e">einkaufen</strong> — to go shopping → <em>Ich kaufe heute ein.</em><br>
+        <strong style="color:#c8a96e">mitbringen</strong> — to bring along → <em>Was soll ich mitbringen?</em></p>
+        <p>The pattern is always the same: in a simple sentence, the prefix goes to the very end. In a subordinate clause (after <em>weil, dass, wenn</em>), the verb reunites with its prefix and goes to the end together: <em>weil ich mich vorbereite.</em></p>
+      </div>
+    </div>
+
+    <div class="deeper-block">
+      <div class="deeper-label">Goal check · Work lean</div>
+      <div class="deeper-title">What does lean look like today?</div>
+      <div class="deeper-body">
+        <p>Your active goal is to keep work purposeful and tidy — nothing open without a reason, nothing accumulating without intent. The success criteria you wrote: Claude chats with clear focus, a manageable task list, low friction for finding where things belong.</p>
+        <p>One question worth sitting with on a break: what is currently open in your working life that has no clear purpose? Not tasks you're avoiding — those are different — but things you've left open out of inertia rather than intention. One of those, closed today, counts as progress.</p>
+        <p>The connection to this morning's diary: the food log is lean by design. The identical meal is lean by design. You're already practising the principle in the physical world. The work version is the same instinct, applied to attention rather than calories.</p>
+      </div>
+    </div>
+
+    <div class="deeper-block">
+      <div class="deeper-label">Language · coming up</div>
+      <div class="deeper-title">What the Einstufungstest will test</div>
+      <div class="deeper-body">
+        <p>The Goethe Institut placement test typically covers reading comprehension, listening, and a short writing task. At A2/B1, the gap between levels is mostly about two things: grammatical range (can you use the past tense reliably? subordinate clauses? separable verbs?) and vocabulary breadth (do you have enough words to express nuance, or do you reach for approximations?).</p>
+        <p>Your spoken German is likely stronger than your written German at the moment — which is common. The diary practice is building the written side. By August, you'll have two months of German writing behind you. That matters. The test will place you correctly. Trust it rather than trying to perform above your level — being placed in a class slightly too easy is demoralising; being placed slightly too hard is exhausting. Accurate is what you want.</p>
+        <p>One thing to practise before the test: <em>weil</em>-clauses. "Ich lerne Deutsch, weil ich in Berlin wohne." The verb goes to the end. It sounds simple and it trips almost everyone at this level.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="site-footer">
+    <span>alone · daily · 2026-06-17</span>
+    <span><a href="index.html" style="color:var(--ink-dimmer);text-decoration:none">← vocabulary</a></span>
+  </footer>
+
+</div><!-- end .page -->
+
+<!-- 9. STEELWATCH -->
+<div style="background:#0a0908;border-top:1px solid #2a2925;border-bottom:1px solid #2a2925;margin:2rem 0 0;padding:2.5rem 0;" id="s-steel">
+  <div style="max-width:640px;margin:0 auto;padding:0 1.5rem;">
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;">
+      <span style="font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:#8ab4b4;font-family:'IBM Plex Mono',monospace;">Steelwatch</span>
+      <span style="font-size:0.58rem;letter-spacing:0.1em;color:#3d3a35;font-family:'IBM Plex Mono',monospace;">+10 min</span>
+      <div style="flex:1;height:1px;background:#2a2925;"></div>
+    </div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;color:#8ab4b4;margin-bottom:0.4rem;">Green steel dispatch</h2>
+    <div style="font-size:0.65rem;letter-spacing:0.1em;color:#3d5555;margin-bottom:1.75rem;font-family:'IBM Plex Mono',monospace;">SSAB LULEÅ · STATUS · 2026-06-17</div>
+
+    <div style="background:#131210;border:1px solid #2a2925;padding:1.25rem;margin-bottom:1.5rem;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:#2a2925;">
+        <div style="background:#0f0e0c;padding:0.8rem;">
+          <div style="font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:#3d5555;margin-bottom:0.3rem;font-family:'IBM Plex Mono',monospace;">Target start</div>
+          <div style="font-size:0.9rem;color:#8ab4b4;font-family:'IBM Plex Mono',monospace;">End 2029</div>
+          <div style="font-size:0.6rem;color:#4a4a40;margin-top:0.2rem;">+12 mo from original</div>
+        </div>
+        <div style="background:#0f0e0c;padding:0.8rem;">
+          <div style="font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:#3d5555;margin-bottom:0.3rem;font-family:'IBM Plex Mono',monospace;">Investment</div>
+          <div style="font-size:0.9rem;color:#8ab4b4;font-family:'IBM Plex Mono',monospace;">€4.5 bn</div>
+          <div style="font-size:0.6rem;color:#4a4a40;margin-top:0.2rem;">incl. €1.45 bn EU grant</div>
+        </div>
+        <div style="background:#0f0e0c;padding:0.8rem;">
+          <div style="font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:#3d5555;margin-bottom:0.3rem;font-family:'IBM Plex Mono',monospace;">Construction</div>
+          <div style="font-size:0.9rem;color:#7ab87a;font-family:'IBM Plex Mono',monospace;">Resuming</div>
+          <div style="font-size:0.6rem;color:#4a4a40;margin-top:0.2rem;">after April safety pause</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:#3d5555;margin-bottom:1rem;font-family:'IBM Plex Mono',monospace;">Recent developments</div>
+
+    <div style="border-left:2px solid #2a4444;padding-left:1rem;margin-bottom:1.1rem;">
+      <div style="font-size:0.6rem;letter-spacing:0.1em;color:#3d5555;margin-bottom:0.3rem;font-family:'IBM Plex Mono',monospace;">2026-05-27 · Luleå · [confirmed]</div>
+      <div style="font-size:0.85rem;color:#c8c2b8;line-height:1.65;font-family:Georgia,serif;">Construction gradually resumes after a month-long pause in April, when ~20 subcontractor workers reported illness symptoms — fine dust, low humidity, possibly contaminated soil from the former Stålverk 80 site. Police launched a preliminary investigation into potential labour violations. The word "gradually" in SSAB's statement matters — not a full return. Police investigation status: still open.</div>
+    </div>
+
+    <div style="border-left:2px solid #2a4444;padding-left:1rem;margin-bottom:1.1rem;">
+      <div style="font-size:0.6rem;letter-spacing:0.1em;color:#3d5555;margin-bottom:0.3rem;font-family:'IBM Plex Mono',monospace;">2026-06-03 · Oxelösund · [confirmed]</div>
+      <div style="font-size:0.85rem;color:#c8c2b8;line-height:1.65;font-family:Georgia,serif;">All appeals against Vattenfall's power line (filed on capercaillie species-protection grounds) withdrawn. Construction resumes. SSAB confirms revised EAF start at Oxelösund: <strong style="color:#8ab4b4;">Q2 2027</strong>. Crisis lasted ~6 weeks — fast resolution, but permitting by wildlife appeal is now an established pattern of risk for every industrial project in Sweden.</div>
+    </div>
+
+    <div style="border-left:2px solid #2a4444;padding-left:1rem;margin-bottom:1.75rem;">
+      <div style="font-size:0.6rem;letter-spacing:0.1em;color:#3d5555;margin-bottom:0.3rem;font-family:'IBM Plex Mono',monospace;">2026-05-19 · Oxelösund · [confirmed]</div>
+      <div style="font-size:0.85rem;color:#c8c2b8;line-height:1.65;font-family:Georgia,serif;">SSAB announces SEK 3.3 bn quenching and tempering line for HARDOX 500Tuf and Armox (protection steels) — +100,000 t/yr from 2030. <em style="color:#6b6760;">Defence industry demand named explicitly as driver.</em> European rearmament is now a visible new demand vector for SSAB's highest-margin products.</div>
+    </div>
+
+    <div style="background:#131210;border:1px solid #2a2925;border-left:3px solid #3d5555;padding:1.25rem;margin-bottom:1.5rem;">
+      <div style="font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:#3d5555;margin-bottom:0.6rem;font-family:'IBM Plex Mono',monospace;">Concept · The policy ratchet</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1rem;color:#8ab4b4;margin-bottom:0.75rem;">Why SSAB is spending €4.5 bn on something more expensive</div>
+      <div style="font-size:0.83rem;color:#c8c2b8;line-height:1.72;font-family:Georgia,serif;">
+        Green steel costs more to produce than conventional blast-furnace steel today. The bet is that it won't by 2029 — because EU policy is systematically closing the gap from the other side.<br><br>
+        <strong style="color:#8ab4b4;">EU ETS</strong> — steelmakers pay for every tonne of CO2 emitted. Free allowances, which shielded them for years, phase out to zero by 2034. Every year conventional steel gets relatively more expensive.<br><br>
+        <strong style="color:#8ab4b4;">CBAM</strong> (Carbon Border Adjustment Mechanism, from 2026) — imported steel faces the same carbon cost at the EU border. Cheap, high-carbon steel from China or India can no longer undercut European producers without paying the carbon price.<br><br>
+        Together: a ratchet. By the time Luleå starts at end-2029, the economics will look materially different from today.
+      </div>
+    </div>
+
+    <div style="font-size:0.83rem;color:#6b6760;line-height:1.7;border-top:1px solid #1e1d19;padding-top:1rem;font-family:Georgia,serif;">
+      <strong style="color:#3d5555;">Why this matters beyond steel.</strong> Luleå is a live experiment in whether heavy industry can actually decarbonise at scale — not in a lab, but in a €4.5 bn factory replacing one of Europe's largest single sources of CO2. Every obstacle it hits (permitting, grid, labour, hydrogen, software integration) is an obstacle every green industrial project will face. Watching it is watching the future of manufacturing arrive in real time.
+    </div>
+  </div>
+</div>
+
+<div style="max-width:640px;margin:0 auto;padding:1.5rem 1.5rem 0;">
+  <div style="border-top:1px solid #2a2925;padding:2rem 0;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:0.62rem;color:#3d3a35;font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em;">alone · daily · 2026-06-17</span>
+    <nav style="display:flex;gap:1.5rem;">
+      <a href="../reads/" style="font-size:0.62rem;color:#6b6760;text-decoration:none;letter-spacing:0.08em;font-family:'IBM Plex Mono',monospace;">reads →</a>
+      <a href="../" style="font-size:0.62rem;color:#6b6760;text-decoration:none;letter-spacing:0.08em;font-family:'IBM Plex Mono',monospace;">home →</a>
+    </nav>
+  </div>
+</div>
+
+<script>
+  // Rail scroll tracking
+  const sections = ['s-pulse','s-mind','s-berlin','s-word','s-coach','s-german','s-read','s-deeper','s-steel'];
+  const dots = document.querySelectorAll('.rail-dot');
+  const lines = document.querySelectorAll('.rail-line');
+
+  function updateRail() {
+    const scrollY = window.scrollY + window.innerHeight * 0.4;
+    let activeIdx = 0;
+    sections.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= scrollY) activeIdx = i;
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i <= activeIdx));
+    lines.forEach((l, i) => l.classList.toggle('active', i < activeIdx));
+  }
+
+  window.scrollTo = function(id) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  window.addEventListener('scroll', updateRail, { passive: true });
+  updateRail();
+</script>
+</body>
+</html>
