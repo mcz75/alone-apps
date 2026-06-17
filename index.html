@@ -1,169 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>alone — vocabulary</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>alone apps</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #0f0e0c; --card-front: #1a1915; --card-back: #f5f0e8;
-      --ink: #f5f0e8; --ink-dim: #6b6760; --ink-back: #1a1915;
-      --accent: #c8a96e; --accent-dim: #6b5a38; --border: #2a2925;
-      --tag-en: #2a3a2a; --tag-en-text: #7ab87a;
-      --tag-de: #2a2a3a; --tag-de-text: #7a7ab8;
-    }
-    body { background: var(--bg); color: var(--ink); font-family: 'IBM Plex Mono', monospace;
-      min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-      padding: 2rem 1rem 4rem; gap: 2rem; }
-    header { width: 100%; max-width: 680px; display: flex; justify-content: space-between;
-      align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
-    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--accent); letter-spacing: -0.02em; }
-    .logo span { font-style: italic; }
-    .meta { font-size: 0.7rem; color: var(--ink-dim); letter-spacing: 0.08em; text-transform: uppercase; }
-    .filters { display: flex; gap: 0.5rem; width: 100%; max-width: 680px; }
-    .filter-btn { background: none; border: 1px solid var(--border); color: var(--ink-dim);
-      font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em;
-      text-transform: uppercase; padding: 0.35rem 0.75rem; cursor: pointer; transition: all 0.2s; }
-    .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent); }
-    .progress-bar { width: 100%; max-width: 680px; height: 2px; background: var(--border); }
-    .progress-fill { height: 100%; background: var(--accent); transition: width 0.4s ease; }
-    .progress-label { font-size: 0.65rem; color: var(--ink-dim); text-align: right; margin-top: 0.4rem; letter-spacing: 0.06em; }
-    .scene { width: 100%; max-width: 680px; perspective: 1200px; cursor: pointer; min-height: 320px; }
-    .card { width: 100%; min-height: 320px; position: relative; transform-style: preserve-3d;
-      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1); }
-    .card.flipped { transform: rotateY(180deg); }
-    .face { position: absolute; width: 100%; min-height: 320px; backface-visibility: hidden;
-      -webkit-backface-visibility: hidden; border: 1px solid var(--border);
-      display: flex; flex-direction: column; padding: 2.5rem; gap: 1rem; }
-    .face--front { background: var(--card-front); justify-content: center; align-items: center; text-align: center; }
-    .face--back { background: var(--card-back); color: var(--ink-back); transform: rotateY(180deg); }
-    .word-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-dim); }
-    .word { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 6vw, 3.5rem);
-      color: var(--ink); letter-spacing: -0.02em; line-height: 1; }
-    .pronunciation { font-size: 0.8rem; color: var(--ink-dim); font-style: italic; }
-    .tag { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 2px; }
-    .tag-en { background: var(--tag-en); color: var(--tag-en-text); }
-    .tag-de { background: var(--tag-de); color: var(--tag-de-text); }
-    .flip-hint { font-size: 0.6rem; letter-spacing: 0.1em; color: var(--accent-dim); text-transform: uppercase; margin-top: auto; }
-    .back-word { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: #1a1915;
-      letter-spacing: -0.01em; border-bottom: 1px solid #d0c9b8; padding-bottom: 0.75rem; }
-    .back-section-label { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8070; margin-top: 0.75rem; }
-    .back-definition { font-size: 0.85rem; line-height: 1.7; color: #2a2520; }
-    .back-examples { font-size: 0.78rem; line-height: 1.65; color: #4a4540; }
-    .back-example { margin-bottom: 0.3rem; }
-    .back-example::before { content: "— "; color: #6b5a38; }
-    .controls { display: flex; gap: 1rem; width: 100%; max-width: 680px; justify-content: center; }
-    .btn { background: none; border: 1px solid var(--border); color: var(--ink-dim);
-      font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; letter-spacing: 0.08em;
-      text-transform: uppercase; padding: 0.6rem 1.5rem; cursor: pointer; transition: all 0.2s; flex: 1; max-width: 180px; }
-    .btn:hover { border-color: var(--accent); color: var(--accent); }
-    .btn:disabled { opacity: 0.2; cursor: default; }
-    .btn-accent { border-color: var(--accent-dim); color: var(--accent); }
-    .btn-accent:hover { background: var(--accent); color: var(--bg); }
-    .status { color: var(--ink-dim); font-size: 0.8rem; letter-spacing: 0.06em; text-align: center; padding: 4rem 0; }
-    .dot { animation: blink 1.2s infinite; }
-    .dot:nth-child(2) { animation-delay: 0.2s; }
-    .dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0f0e0c;color:#f5f0e8;font-family:'IBM Plex Mono',monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;}
+    .logo{font-family:'Playfair Display',serif;font-size:1.6rem;color:#c8a96e;margin-bottom:0.5rem;}
+    .logo em{font-style:italic;}
+    .tagline{font-size:0.65rem;color:#3d3a35;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3rem;}
+    .nav{display:flex;flex-direction:column;gap:1px;width:100%;max-width:300px;}
+    .nav a{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 1.25rem;background:#131210;border:1px solid #2a2925;text-decoration:none;color:#f5f0e8;font-size:0.82rem;transition:border-color 0.2s,color 0.2s;}
+    .nav a:hover{border-color:#c8a96e;color:#c8a96e;}
+    .nav a span{color:#3d3a35;font-size:0.7rem;}
+    .date{margin-top:2.5rem;font-size:0.6rem;color:#2a2925;letter-spacing:0.1em;}
   </style>
 </head>
 <body>
-<header>
-  <div class="logo"><span>alone</span> — vocabulary</div>
-  <div class="meta" id="date-label"></div>
-</header>
-<div class="filters">
-  <button class="filter-btn active" data-lang="ALL">All</button>
-  <button class="filter-btn" data-lang="EN">English</button>
-  <button class="filter-btn" data-lang="DE">Deutsch</button>
-</div>
-<div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-<div class="progress-label" id="progress-label">— / —</div>
-<div class="scene" id="scene" onclick="flipCard()">
-  <div class="card" id="card">
-    <div class="face face--front"><div class="status">Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div></div>
-    <div class="face face--back"></div>
-  </div>
-</div>
-<div class="controls">
-  <button class="btn" id="btn-prev" onclick="navigate(-1)" disabled>← prev</button>
-  <button class="btn btn-accent" onclick="shuffleCards()">shuffle</button>
-  <button class="btn" id="btn-next" onclick="navigate(1)">next →</button>
-</div>
-<script>
-let allCards = [], filtered = [], current = 0, isFlipped = false;
-document.getElementById("date-label").textContent = new Date().toISOString().slice(0,10);
-
-function renderFront(c) {
-  return `<div class="word-label">word</div>
-    <div class="word">${c.word}</div>
-    ${c.pronunciation ? `<div class="pronunciation">${c.pronunciation}</div>` : ""}
-    <span class="tag tag-${c.lang.toLowerCase()}">${c.lang}</span>
-    <div class="flip-hint">click to reveal</div>`;
-}
-function renderBack(c) {
-  const ex = c.examples.map(e => `<div class="back-example">${e}</div>`).join("");
-  return `<div class="back-word">${c.word}</div>
-    <div class="back-section-label">definition</div>
-    <div class="back-definition">${c.definition}</div>
-    ${c.examples.length ? `<div class="back-section-label">examples</div><div class="back-examples">${ex}</div>` : ""}`;
-}
-function showCard(i) {
-  const c = filtered[i];
-  if (!c) return;
-  isFlipped = false;
-  document.getElementById("card").classList.remove("flipped");
-  document.querySelector(".face--front").innerHTML = renderFront(c);
-  document.querySelector(".face--back").innerHTML = renderBack(c);
-  document.getElementById("btn-prev").disabled = i === 0;
-  document.getElementById("btn-next").disabled = i === filtered.length - 1;
-  const pct = filtered.length > 1 ? (i / (filtered.length - 1)) * 100 : 100;
-  document.getElementById("progress-fill").style.width = pct + "%";
-  document.getElementById("progress-label").textContent = `${i+1} / ${filtered.length}`;
-}
-function flipCard() {
-  isFlipped = !isFlipped;
-  document.getElementById("card").classList.toggle("flipped", isFlipped);
-}
-function navigate(dir) {
-  if (isFlipped) {
-    isFlipped = false;
-    document.getElementById("card").classList.remove("flipped");
-    setTimeout(() => { current = Math.max(0, Math.min(filtered.length-1, current+dir)); showCard(current); }, 300);
-    return;
-  }
-  current = Math.max(0, Math.min(filtered.length-1, current+dir));
-  showCard(current);
-}
-function shuffleCards() {
-  for (let i = filtered.length-1; i > 0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
-  }
-  current = 0; showCard(0);
-}
-document.querySelectorAll(".filter-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    const lang = btn.dataset.lang;
-    filtered = lang === "ALL" ? [...allCards] : allCards.filter(c => c.lang === lang);
-    current = 0; if (filtered.length) showCard(0);
-  });
-});
-async function init() {
-  try {
-    const res = await fetch("words.json");
-    allCards = await res.json();
-    filtered = [...allCards];
-    if (filtered.length) showCard(0);
-  } catch(e) {
-    document.querySelector(".face--front").innerHTML = `<div class="status">Could not load vocabulary.<br/>${e.message}</div>`;
-  }
-}
-init();
-</script>
+  <div class="logo"><em>alone</em> apps</div>
+  <div class="tagline">personal tools · Berlin</div>
+  <nav class="nav">
+    <a href="daily/">Daily <span>today →</span></a>
+    <a href="reads/">Reads <span>archive →</span></a>
+  </nav>
+  <div class="date">Wednesday · 17 June 2026</div>
 </body>
 </html>
