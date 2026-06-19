@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daily — 2026-06-18</title>
+<title>Daily — 2026-06-19</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -17,578 +17,397 @@
     --parchment: #f5f0e8;
     --parchment-text: #2a2218;
     --parchment-dim: #6a5c42;
-    --section-pad: 64px 64px 64px calc(var(--rail-width) + 48px);
+    --pad: 64px 64px 64px calc(var(--rail-width) + 48px);
+    --green: #5a9a6a;
+    --red: #9a5a5a;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-weight: 300; line-height: 1.7; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 300;
-    line-height: 1.7;
-  }
+  #rail { position: fixed; left: 0; top: 0; bottom: 0; width: var(--rail-width); background: #0a0908; border-right: 1px solid #1e1c18; display: flex; flex-direction: column; align-items: center; padding: 24px 0; z-index: 100; }
+  .rail-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); margin: 12px 0; cursor: pointer; transition: background 0.3s, transform 0.3s; flex-shrink: 0; }
+  .rail-dot.active { background: var(--gold); transform: scale(1.4); }
+  .rail-line { flex: 1; width: 1px; background: #1e1c18; }
 
-  /* Rail */
-  #rail {
-    position: fixed;
-    left: 0; top: 0; bottom: 0;
-    width: var(--rail-width);
-    background: #0a0908;
-    border-right: 1px solid #1e1c18;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24px 0;
-    gap: 0;
-    z-index: 100;
-  }
-
-  .rail-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--text-faint);
-    margin: 16px 0;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.3s;
-    flex-shrink: 0;
-  }
-  .rail-dot.active {
-    background: var(--gold);
-    transform: scale(1.4);
-  }
-  .rail-line {
-    flex: 1;
-    width: 1px;
-    background: #1e1c18;
-  }
-
-  /* Sections */
-  .section {
-    min-height: 100vh;
-    padding: var(--section-pad);
-    border-bottom: 1px solid #1a1814;
-    scroll-margin-top: 0;
-  }
-
-  .section-eyebrow {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    color: var(--gold-dim);
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 4vw, 52px);
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.15;
-    margin-bottom: 32px;
-  }
-
-  h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(20px, 2.5vw, 32px);
-    font-weight: 400;
-    color: var(--gold);
-    margin-bottom: 20px;
-    line-height: 1.3;
-  }
-
-  h3 {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    color: var(--gold-dim);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    margin-top: 32px;
-  }
-
+  .section { min-height: 100vh; padding: var(--pad); border-bottom: 1px solid #1a1814; scroll-margin-top: 0; }
+  .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 24px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 52px); font-weight: 700; color: #fff; line-height: 1.15; margin-bottom: 32px; }
+  h2 { font-family: 'Playfair Display', serif; font-size: clamp(20px, 2.5vw, 32px); font-weight: 400; color: var(--gold); margin-bottom: 20px; line-height: 1.3; }
+  h3 { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.12em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 12px; margin-top: 32px; }
   p { margin-bottom: 1.2em; color: var(--text); }
 
-  .kpi-row {
-    display: flex;
-    gap: 32px;
-    flex-wrap: wrap;
-    margin-bottom: 32px;
-  }
-  .kpi {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .kpi-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-  }
-  .kpi-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--gold);
-    line-height: 1;
-  }
-  .kpi-sub {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--text-dim);
-  }
+  .kpi-row { display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 32px; }
+  .kpi { display: flex; flex-direction: column; gap: 4px; }
+  .kpi-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; }
+  .kpi-value { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--gold); line-height: 1; }
+  .kpi-sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); }
 
-  .intention {
-    border-left: 2px solid var(--gold);
-    padding: 12px 20px;
-    margin: 8px 0;
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    color: var(--text);
-    font-size: 17px;
-  }
+  .intention { border-left: 2px solid var(--gold); padding: 12px 20px; margin: 8px 0; font-family: 'Playfair Display', serif; font-style: italic; color: var(--text); font-size: 17px; }
 
-  /* Berlin Today */
-  .news-item {
-    padding: 20px 0;
-    border-bottom: 1px solid #1e1c18;
-  }
-  .news-item:last-child { border-bottom: none; }
-  .news-tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--gold-dim);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
+  .word-display { font-family: 'Playfair Display', serif; font-size: clamp(36px, 6vw, 72px); font-weight: 700; color: var(--gold); letter-spacing: -0.02em; line-height: 1; margin-bottom: 8px; }
+  .word-meta { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-dim); margin-bottom: 32px; }
+  .example { background: #141210; border-left: 2px solid var(--gold-dim); padding: 14px 18px; margin: 10px 0; font-family: 'Playfair Display', serif; font-style: italic; font-size: 15px; color: var(--text); }
+  .hook-box { background: #13110e; border: 1px solid #2a2520; padding: 20px 24px; margin-top: 28px; }
+  .hook-box strong { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-dim); display: block; margin-bottom: 8px; }
 
-  /* Word section */
-  .word-display {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(36px, 6vw, 72px);
-    font-weight: 700;
-    color: var(--gold);
-    letter-spacing: -0.02em;
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-  .word-meta {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-bottom: 32px;
-  }
-  .example {
-    background: #141210;
-    border-left: 2px solid var(--gold-dim);
-    padding: 14px 18px;
-    margin: 10px 0;
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 15px;
-    color: var(--text);
-  }
-  .hook-box {
-    background: #13110e;
-    border: 1px solid #2a2520;
-    padding: 20px 24px;
-    margin-top: 28px;
-  }
-  .hook-box strong {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold-dim);
-    display: block;
-    margin-bottom: 8px;
-  }
+  .correction-card { background: #111009; border: 1px solid #2a2520; padding: 20px 24px; margin-bottom: 16px; }
+  .correction-wrong { font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #8a6060; text-decoration: line-through; margin-bottom: 4px; }
+  .correction-right { font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #6a9a6a; margin-bottom: 10px; }
+  .correction-note { font-size: 14px; color: var(--text-dim); line-height: 1.5; }
 
-  /* Coach */
-  .correction-card {
-    background: #111009;
-    border: 1px solid #2a2520;
-    padding: 20px 24px;
-    margin-bottom: 16px;
-  }
-  .correction-wrong {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 14px;
-    color: #8a6060;
-    text-decoration: line-through;
-    margin-bottom: 4px;
-  }
-  .correction-right {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 14px;
-    color: #6a9a6a;
-    margin-bottom: 10px;
-  }
-  .correction-note {
-    font-size: 14px;
-    color: var(--text-dim);
-    line-height: 1.5;
-  }
+  .german-phrase { font-family: 'Playfair Display', serif; font-size: clamp(22px, 3vw, 36px); font-weight: 700; color: var(--gold); margin-bottom: 8px; }
+  .german-translation { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--text-dim); margin-bottom: 24px; letter-spacing: 0.05em; }
 
-  /* German minute */
-  .german-phrase {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(22px, 3vw, 36px);
-    font-weight: 700;
-    color: var(--gold);
-    margin-bottom: 8px;
-  }
-  .german-translation {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-bottom: 24px;
-    letter-spacing: 0.05em;
-  }
+  /* EXERCISES */
+  .exercise-set { margin-bottom: 40px; }
+  .exercise-set-title { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid #2a2520; }
+  .ex-item { margin-bottom: 20px; }
+  .ex-sentence { font-size: 16px; color: var(--text); line-height: 1.8; margin-bottom: 8px; }
+  .ex-sentence em { font-style: normal; color: var(--gold-dim); }
+  .ex-input-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .ex-input { background: #13110e; border: 1px solid #3a3530; color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 14px; padding: 8px 14px; width: 200px; outline: none; transition: border-color 0.2s; }
+  .ex-input:focus { border-color: var(--gold-dim); }
+  .ex-input.correct { border-color: var(--green); background: #0e130e; color: var(--green); }
+  .ex-input.wrong { border-color: var(--red); background: #130e0e; color: var(--red); }
+  .ex-btn { background: #1e1c18; border: 1px solid #3a3530; color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 16px; cursor: pointer; transition: all 0.2s; }
+  .ex-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+  .ex-feedback { margin-top: 8px; font-size: 13px; line-height: 1.5; display: none; }
+  .ex-feedback.correct { color: var(--green); }
+  .ex-feedback.wrong { color: var(--red); }
+  .ex-score { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--gold); margin-top: 16px; display: none; }
+  .ex-reset { background: none; border: 1px solid #3a3530; color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 12px; cursor: pointer; margin-top: 12px; display: none; }
+  .ex-reset:hover { border-color: var(--gold-dim); color: var(--gold); }
 
-  /* Read section — parchment */
-  #read {
-    background: var(--parchment);
-    color: var(--parchment-text);
-    padding: var(--section-pad);
-    min-height: 100vh;
-  }
-  #read .section-eyebrow { color: #9a8060; }
+  /* READ parchment */
+  #read { background: var(--parchment); color: var(--parchment-text); padding: var(--pad); min-height: 100vh; }
+  #read .eyebrow { color: #9a8060; }
   #read h2 { color: #5a3e20; }
   #read h3 { color: #9a8060; }
   #read p { color: var(--parchment-text); }
-  #read .rail-indicator {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--parchment-dim);
-    margin-bottom: 20px;
-  }
-  #read blockquote {
-    border-left: 3px solid #c8a96e;
-    padding: 12px 20px;
-    margin: 24px 0;
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    color: #5a3e20;
-    font-size: 17px;
-  }
+  #read blockquote { border-left: 3px solid #c8a96e; padding: 12px 20px; margin: 24px 0; font-family: 'Playfair Display', serif; font-style: italic; color: #5a3e20; font-size: 17px; }
 
-  /* Deeper */
-  .deeper-block {
-    background: #0c0b09;
-    border: 1px solid #2a2520;
-    padding: 28px 32px;
-    margin-bottom: 24px;
-  }
+  .steelwatch-badge { display: inline-block; background: #1a150a; border: 1px solid var(--gold-dim); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--gold-dim); text-transform: uppercase; padding: 4px 10px; margin-bottom: 16px; }
+  .deeper-block { background: #0c0b09; border: 1px solid #2a2520; padding: 28px 32px; margin-bottom: 24px; }
   .deeper-block h3 { margin-top: 0; }
 
-  .steelwatch-badge {
-    display: inline-block;
-    background: #1a150a;
-    border: 1px solid var(--gold-dim);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    color: var(--gold-dim);
-    text-transform: uppercase;
-    padding: 4px 10px;
-    margin-bottom: 16px;
-  }
-
-  .parts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
-    margin-top: 16px;
-  }
-  .part-card {
-    background: #13110e;
-    border: 1px solid #2a2520;
-    padding: 14px 16px;
-  }
-  .part-card .num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--gold-dim);
-    margin-bottom: 4px;
-  }
-  .part-card .title {
-    font-size: 13px;
-    color: var(--text);
-    font-weight: 500;
-  }
-  .part-card .note {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 6px;
-    line-height: 1.4;
-  }
+  .news-item { padding: 20px 0; border-bottom: 1px solid #1e1c18; }
+  .news-item:last-child { border-bottom: none; }
+  .news-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--gold-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
 
   @media (max-width: 600px) {
-    :root { --section-pad: 48px 24px 48px calc(var(--rail-width) + 16px); }
+    :root { --pad: 48px 24px 48px calc(var(--rail-width) + 16px); }
     .kpi-row { gap: 20px; }
+    .ex-input { width: 160px; }
   }
 </style>
 </head>
 <body>
 
-<!-- Reading depth rail -->
 <nav id="rail">
-  <div class="rail-dot active" data-target="pulse" title="Pulse — 2 min"></div>
+  <div class="rail-dot active" data-target="pulse"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" data-target="mind" title="Mind — 5 min"></div>
+  <div class="rail-dot" data-target="mind"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" data-target="berlin" title="Berlin Today — 5 min"></div>
+  <div class="rail-dot" data-target="berlin"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" data-target="word" title="Word — 10 min"></div>
+  <div class="rail-dot" data-target="word"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" data-target="coach" title="Coach — 10 min"></div>
+  <div class="rail-dot" data-target="coach"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" data-target="german" title="German Minute — 10 min"></div>
+  <div class="rail-dot" data-target="german"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" data-target="read" title="Read — 20 min"></div>
+  <div class="rail-dot" data-target="exercises"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" data-target="deeper" title="Deeper — 30 min"></div>
+  <div class="rail-dot" data-target="read"></div>
+  <div class="rail-line"></div>
+  <div class="rail-dot" data-target="deeper"></div>
 </nav>
 
 <!-- 1. PULSE -->
 <section class="section" id="pulse">
-  <div class="section-eyebrow">2026-06-18 · Thursday · 2 min</div>
-  <h1>Survive the day.<br>That's enough.</h1>
-
+  <div class="eyebrow">2026-06-19 · Friday · Berlin · 2 min</div>
+  <h1>Poznań in sight.<br>First, the apartment.</h1>
   <div class="kpi-row">
     <div class="kpi">
       <span class="kpi-label">Blood Pressure</span>
-      <span class="kpi-value">133/85</span>
-      <span class="kpi-sub">Slightly elevated. Watch it.</span>
+      <span class="kpi-value">123/75</span>
+      <span class="kpi-sub">Better than yesterday. Reason unknown.</span>
     </div>
     <div class="kpi">
       <span class="kpi-label">Weather · Berlin</span>
-      <span class="kpi-value">29°C</span>
-      <span class="kpi-sub">Partly sunny · 25% rain chance</span>
+      <span class="kpi-value">18°C</span>
+      <span class="kpi-sub">Sunny. Good day to travel.</span>
     </div>
     <div class="kpi">
-      <span class="kpi-label">Steelwatch</span>
-      <span class="kpi-value">Pts 1–8</span>
-      <span class="kpi-sub">Learning guide complete</span>
+      <span class="kpi-label">Sleep</span>
+      <span class="kpi-value">5h</span>
+      <span class="kpi-sub">Too short. No CrossFit today.</span>
     </div>
   </div>
-
-  <div class="intention">Today's intention: iTop presentation with Ashwin. Small and honest — show what exists.</div>
-  <div class="intention">Still pending: Arzttermin · Goethe Institut Einstufungstest.</div>
+  <div class="intention">Before leaving: impose order on the apartment. Pause before putting things down.</div>
+  <div class="intention">Still pending: Arzttermin · Goethe Einstufungstest.</div>
+  <div class="intention">Work: Gemini + OneDrive/SharePoint · agent template → task in Alone.</div>
 </section>
 
 <!-- 2. MIND -->
 <section class="section" id="mind">
-  <div class="section-eyebrow">Mind · 5 min</div>
-  <h2>Holger was sniffing you.</h2>
-
-  <p>The dream arrived uninvited and made its own logic: you had worn perfume the evening before, and your sleeping mind turned it into a scene. Holger — a colleague you work with in a technology stream — became a dog, or perhaps just acted like one, tracing you by scent through the night.</p>
-
-  <p>It is a small, almost comic image, but the brain rarely dreams without reason. Holger is in your professional life in a way that carries some weight. Today you present together — or rather, you present what you have, which is less than you planned. You are not fully prepared, and the goal, stated simply, is to survive. That kind of honesty is its own form of readiness.</p>
-
-  <p>Blood pressure at 133/85 — slightly higher than last week's 126/86. The body keeps score even when you're not watching. The Arzttermin has been delayed twice now. Worth naming that.</p>
-
-  <p>Two things remain on the list: the doctor's appointment and the Goethe Institut placement test. They will not disappear by being ignored. But today is not the day to solve them — today is for the presentation.</p>
+  <div class="eyebrow">Mind · 5 min</div>
+  <h2>A deliberate reset.</h2>
+  <p>No dream this morning — or none remembered. Blood pressure 123/75, down ten points from yesterday's 133/85. The body corrected itself overnight without instruction. Five hours of sleep is not enough, but the reading was 123/75, and that matters.</p>
+  <p>The weekend has been planned for some time: Poznań, Ania, the animals, a change of register. Before the train, there is the apartment. The problem you named is precise — things get put down without thought, and the chaos accumulates not from any single decision but from the absence of one. The intention is equally precise: think before setting something aside. That is not a cleaning plan, it is a habit correction.</p>
+  <p>At work, two technical tasks and one structural one. The structural one — an agent template with instructions in Alone — is the kind of thing that compounds. Set it up once, use it many times. Worth doing before the weekend while the thinking is fresh.</p>
+  <p>The Arzttermin and the Goethe test remain unscheduled. They have appeared in the diary three days in a row now. That is not a coincidence — it is a signal that something is blocking the action. Worth naming that before next week.</p>
 </section>
 
 <!-- 3. BERLIN TODAY -->
 <section class="section" id="berlin">
-  <div class="section-eyebrow">Berlin Today · 5 min</div>
-  <h2>The city, this Thursday.</h2>
-
-  <div class="news-item">
-    <div class="news-tag">Transport</div>
-    <p>The new <strong>S15 line</strong> is running from mid-June — every 10 minutes between Gesundbrunnen and the Hauptbahnhof. Faster for anyone making that north-south commute.</p>
-  </div>
-
-  <div class="news-item">
-    <div class="news-tag">Archaeology</div>
-    <p>At <strong>Molkenmarkt</strong>, excavators have uncovered the remains of a substantial medieval building — described as unusual even by Berlin's archaeologists, who are rarely surprised.</p>
-  </div>
-
-  <div class="news-item">
-    <div class="news-tag">Culture · Coming up</div>
-    <p>The <strong>Open-Air Bookshop at Bebelplatz</strong> runs June 27–28 — more than 100 stalls on the square where books were burned in 1933. A worthwhile Saturday if you're back from Poznań by then.</p>
-  </div>
-
+  <div class="eyebrow">Berlin Today · 5 min</div>
+  <h2>The city on a Friday.</h2>
   <div class="news-item">
     <div class="news-tag">Football</div>
-    <p>Germany plays its <strong>first World Cup 2026 match today</strong>. The city will feel it this evening.</p>
+    <p>Germany's World Cup campaign continues — the city is paying attention. Screens in bars, flags on balconies, the particular Friday-afternoon energy of a city that has decided to stop working early.</p>
+  </div>
+  <div class="news-item">
+    <div class="news-tag">Transport</div>
+    <p>Friday afternoon trains to Poznań run via Frankfurt (Oder). The IC connection takes around 2h40 from Berlin Hauptbahnhof — worth booking a seat on a World Cup Friday.</p>
+  </div>
+  <div class="news-item">
+    <div class="news-tag">Culture · Coming up</div>
+    <p>Bebelplatz Open-Air Bookshop on June 27–28. If you're back from Poznań by Saturday the 27th, that's worth an hour on the square.</p>
+  </div>
+  <div class="news-item">
+    <div class="news-tag">Summer in Berlin</div>
+    <p>18°C and sunny — the kind of Berlin Friday that makes the apartment feel less urgent and the train platform feel more so. The city will be emptier by this evening.</p>
   </div>
 </section>
 
 <!-- 4. WORD -->
 <section class="section" id="word">
-  <div class="section-eyebrow">Word · 10 min</div>
-
-  <div class="word-display">Ballaststoffe</div>
-  <div class="word-meta">German · noun, plural · B1 · die Ballaststoffe / der Ballaststoff</div>
-
-  <p><strong>Dietary fibre</strong> — the indigestible parts of plant food that slow digestion, feed gut bacteria, and keep blood sugar stable. Found on every German nutrition label, between <em>Kohlenhydrate</em> and <em>Eiweiß</em>.</p>
-
-  <h3>The literal meaning</h3>
-  <p><em>Ballast</em> (dead weight) + <em>Stoffe</em> (substances). Ballast substances — weight that slows things down. The metaphor is built directly into the word: fibre slows absorption the way ballast slows a ship.</p>
-
-  <h3>On the nutrition label</h3>
-  <p>Under <em>Nährwerte</em>, you will always find: <em>Kohlenhydrate / davon Zucker / Ballaststoffe / Eiweiß / Fett</em>. The rice, lentils, and frozen vegetables you eat daily are high in Ballaststoffe — which is partly why the meal keeps you going through a 6am CrossFit session.</p>
-
-  <div class="example">Roggen enthält viele Ballaststoffe — und das schmeckt man.</div>
-  <div class="example">Wie viel Gramm Ballaststoffe hat das pro Portion?</div>
-  <div class="example">Ballaststoffe sind wichtig für die Verdauung.</div>
-
+  <div class="eyebrow">Word · 10 min</div>
+  <div class="word-display">nachdenken</div>
+  <div class="word-meta">German · separable verb · B1 · denkt nach / dachte nach / hat nachgedacht</div>
+  <p><strong>To think something through</strong> — to pause and reflect rather than act immediately. The separable prefix <em>nach-</em> carries the sense of following up, going deeper. It is the verb you needed today: <em>ich sollte nachdenken, bevor ich etwas liegen lasse.</em></p>
+  <h3>Why separable?</h3>
+  <p>In main clauses, <em>nach-</em> detaches and travels to the end: <em>Ich denke kurz nach.</em> In subordinate clauses, it stays attached: <em>…weil ich nachdenke.</em> In infinitive constructions: <em>…um nachzudenken.</em></p>
+  <div class="example">Ich denke kurz nach, bevor ich etwas kaufe.</div>
+  <div class="example">Hast du darüber nachgedacht?</div>
+  <div class="example">Er hat lange nachgedacht — und dann trotzdem das Falsche getan.</div>
   <div class="hook-box">
     <strong>Memory hook</strong>
-    A ship takes on ballast to stay stable and move slowly, controlled. Fibre does the same in your gut — stabilises blood sugar, slows absorption. You eat the same meal every day precisely for this reason: predictability is its own form of stability.
+    <em>Nach</em> means "after" or "following." <em>Nachdenken</em> is thinking that follows — the pause after the impulse. Today's diary entry used it correctly: <em>ich sollte nachdenken, bevor ich etwas liegen lasse.</em> That sentence came from you.
   </div>
 </section>
 
 <!-- 5. COACH -->
 <section class="section" id="coach">
-  <div class="section-eyebrow">Coach · 10 min · From today's session</div>
-  <h2>One pattern to carry.</h2>
-
-  <p>You made 19 corrections today. One of them runs through almost all of them: <strong>the separable verb.</strong></p>
-
+  <div class="eyebrow">Coach · 10 min · Pattern of the week</div>
+  <h2>ist, not is.</h2>
+  <p>This correction has appeared in every German session this week. It is not a knowledge gap — you know <em>sein</em>. It is a muscle memory gap: your fingers type <em>is</em> because English is faster.</p>
   <div class="correction-card">
-    <div class="correction-wrong">noch nich forbereite</div>
-    <div class="correction-right">noch nicht vorbereitet</div>
-    <div class="correction-note">Three things happened here: <em>nicht</em> lost its final t; the prefix was spelled <em>for-</em> instead of <em>vor-</em>; and <em>vorbereitet</em> needs the past participle form. The verb is <strong>vorbereiten</strong> — separable, with the prefix always going to the end in main clauses.</div>
+    <div class="correction-wrong">Mein Blutdruck is 123/75</div>
+    <div class="correction-right">Mein Blutdruck ist 123/75</div>
+    <div class="correction-note">The verb <em>sein</em> in third-person singular is <em>ist</em>. You write this sentence every morning. It should be automatic by now — and it will be, once the habit is fixed.</div>
   </div>
-
   <div class="correction-card">
-    <div class="correction-wrong">forbereite is fur</div>
-    <div class="correction-right">bereite es für … vor</div>
-    <div class="correction-note"><em>vor</em> is the prefix. It detaches and goes to the end of the clause. <em>bereite … vor</em> — the gap between them can be large, and the verb still holds together. This is the core separable verb pattern.</div>
+    <div class="correction-wrong">Mein Ziel is</div>
+    <div class="correction-right">Mein Ziel ist</div>
+    <div class="correction-note">Same pattern. <em>Mein X is</em> is never correct in German. The rule is absolute: third-person singular of <em>sein</em> = <em>ist</em>, always.</div>
   </div>
-
-  <h3>The rule to write on your hand</h3>
-  <p style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--gold); padding: 16px; background: #13110e; border: 1px solid #2a2520;">Ich <strong>bereite</strong> das Essen für CrossFit <strong>vor</strong>.<br>→ The prefix always travels to the end.</p>
-
-  <p>Other separable verbs you use regularly: <em>aufstehen, anfangen, einkaufen, vorstellen, zurückkommen</em>. Same rule, every time.</p>
+  <div class="hook-box">
+    <strong>Fix</strong>
+    Before you finish any German sentence with a form of "to be" — pause. One extra letter: <strong>ist</strong>. Make it a physical habit, not a grammar rule.
+  </div>
 </section>
 
 <!-- 6. GERMAN MINUTE -->
 <section class="section" id="german">
-  <div class="section-eyebrow">German Minute · 10 min · One phrase for the day</div>
-
-  <div class="german-phrase">beschnuppern</div>
-  <div class="german-translation">to sniff (of animals) · weak verb · er beschnuppert / beschnupperte / hat beschnuppert</div>
-
-  <p>You coined this perfectly today — or rather, you reached for it and it was right there. <em>Beschnuppern</em> is what a dog does when it traces someone by scent, tentative and focused. It is slightly informal, slightly affectionate. It can be used for people too, with a wry tone: <em>Die Kollegen beschnuppern sich noch</em> — the colleagues are still sizing each other up.</p>
-
-  <h3>Use it today in a sentence</h3>
-  <div class="example">Holger beschnupperte mich — wahrscheinlich wegen des Parfüms.</div>
-  <div class="example">Der Hund beschnupperte jeden Gast an der Tür.</div>
-  <div class="example">In der ersten Woche beschnuppern sich die Teams immer erst.</div>
-
+  <div class="eyebrow">German Minute · 10 min</div>
+  <div class="german-phrase">bevor ich etwas liegen lasse</div>
+  <div class="german-translation">before I leave something lying around · from today's diary</div>
+  <p>This phrase came from you today — built correctly on the first attempt. <em>Bevor</em> introduces a subordinate clause, so the verb goes to the end: <em>liegen lasse</em>. The verb here is <em>lassen</em> used with an infinitive — <em>liegen lassen</em> = to leave something lying (to abandon it in place).</p>
+  <h3>The pattern: lassen + infinitive</h3>
+  <div class="example">Ich lasse das Buch auf dem Tisch liegen.</div>
+  <div class="example">Er hat die Tasche im Büro liegen lassen.</div>
+  <div class="example">Lass das nicht einfach liegen — räum es weg.</div>
+  <h3>Related: fallen lassen, stehen lassen</h3>
+  <p><em>Fallen lassen</em> — to drop something (literally or figuratively). <em>Stehen lassen</em> — to leave something standing, to abandon. Same construction, same logic.</p>
   <div class="hook-box">
     <strong>Why it matters</strong>
-    This word came from your dream, which came from your life. The best German vocabulary arrives this way — not from a list, but from a moment that needed a word. <em>Beschnuppern</em> is now yours.
+    The habit you described in the diary — putting things down without thinking — has a precise German verb for it: <em>liegen lassen</em>. Language that fits the thought is language that sticks.
   </div>
 </section>
 
-<!-- 7. READ — parchment -->
+<!-- 7. EXERCISES -->
+<section class="section" id="exercises">
+  <div class="eyebrow">Exercises · 10–15 min · From recent coaching</div>
+  <h2>Type the answer. No shortcuts.</h2>
+
+  <!-- GERMAN -->
+  <div class="exercise-set" id="de-set">
+    <div class="exercise-set-title">German — fill in the gap</div>
+
+    <div class="ex-item">
+      <div class="ex-sentence">Heute Morgen hatte ich keinen Traum. Mein Blutdruck <em>[___]</em> 123/75.</div>
+      <div class="ex-input-row">
+        <input class="ex-input" type="text" placeholder="type here" data-answer="ist" data-explanation="Third-person singular of sein = ist. Always. Never 'is'.">
+        <button class="ex-btn" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-sentence">Ich bereite das Essen für CrossFit <em>[___]</em>.</div>
+      <div class="ex-input-row">
+        <input class="ex-input" type="text" placeholder="type here" data-answer="vor" data-explanation="vorbereiten is separable. The prefix vor- travels to the end of the clause.">
+        <button class="ex-btn" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-sentence">Ich freue mich <em>[___]</em> das Wochenende in Poznań.</div>
+      <div class="ex-input-row">
+        <input class="ex-input" type="text" placeholder="type here" data-answer="auf" data-explanation="sich freuen auf = looking forward to something future. sich freuen über = pleased about something past.">
+        <button class="ex-btn" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-sentence">Das Essen besteht aus Linsen, Reis, <em>[___]</em> und Tofu.</div>
+      <div class="ex-input-row">
+        <input class="ex-input" type="text" placeholder="type here" data-answer="Gemüse" data-explanation="Gemüse — umlaut required on the ü. All nouns capitalised.">
+        <button class="ex-btn" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-sentence">Ich habe gestern <em>[___]</em> einen Arzttermin noch einen Einstufungstest gemacht.</div>
+      <div class="ex-input-row">
+        <input class="ex-input" type="text" placeholder="type here" data-answer="weder" data-explanation="weder … noch = neither … nor. A fixed pair — weder always comes first.">
+        <button class="ex-btn" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-sentence">Ich sollte <em>[___]</em>, bevor ich etwas liegen lasse.</div>
+      <div class="ex-input-row">
+        <input class="ex-input" type="text" placeholder="type here" data-answer="nachdenken" data-explanation="nachdenken = to think something through. Separable verb: nach- stays attached in infinitive constructions.">
+        <button class="ex-btn" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="ex-score" id="de-score"></div>
+    <button class="ex-reset" id="de-reset" onclick="resetSet('de-set', 'de-score', 'de-reset')">Reset</button>
+  </div>
+
+  <!-- ENGLISH -->
+  <div class="exercise-set" id="en-set">
+    <div class="exercise-set-title">English — fill in the gap · C1 patterns</div>
+
+    <div class="ex-item">
+      <div class="ex-sentence">I spent the evening investigating Steelwatch — it is <em>[___]</em> relevant to my work.</div>
+      <div class="ex-input-row">
+        <input class="ex-input" type="text" placeholder="type here" data-answer="genuinely" data-explanation="'Genuinely' is stronger and more precise than 'really' at C1. It signals the connection is substantive, not just interesting.">
+        <button class="ex-btn" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-sentence">I had two days in <em>[___]</em> row, so I decided to rest.</div>
+      <div class="ex-input-row">
+        <input class="ex-input" type="text" placeholder="type here" data-answer="a" data-explanation="Fixed phrase: 'in a row'. The article 'a' is required — never 'the row'.">
+        <button class="ex-btn" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-sentence">I <em>[___]</em> to my mother at seven — a short, warm call.</div>
+      <div class="ex-input-row">
+        <input class="ex-input" type="text" placeholder="type here" data-answer="spoke" data-explanation="'Spoke to' is more natural than 'talked to' for a phone call in British English. 'Talked' works, but 'spoke' is more elegant at C1.">
+        <button class="ex-btn" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-sentence">I am <em>[___]</em> CrossFit tomorrow — I need the rest.</div>
+      <div class="ex-input-row">
+        <input class="ex-input" type="text" placeholder="type here" data-answer="skipping" data-explanation="Present continuous for a decided near-future plan: 'I am skipping'. Not 'I skip' (simple present = habit, not decision).">
+        <button class="ex-btn" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="ex-score" id="en-score"></div>
+    <button class="ex-reset" id="en-reset" onclick="resetSet('en-set', 'en-score', 'en-reset')">Reset</button>
+  </div>
+</section>
+
+<!-- 8. READ — parchment -->
 <section id="read">
-  <div class="section-eyebrow">Read · 20 min</div>
-  <h2>The Liquid Clock</h2>
-  <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #9a8060; margin-bottom: 32px;">On why steel cannot wait — and what that teaches about time-critical systems.</p>
+  <div class="eyebrow">Read · 20 min</div>
+  <h2>The Ramp and the Moat</h2>
+  <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #9a8060; margin-bottom: 32px;">On what green steel and a weekend apartment reset have in common.</p>
 
-  <p>There is a moment in steelmaking when time stops being abstract. The furnace tips, two hundred tonnes of liquid steel pour into a ladle, and from that point forward there is a countdown that cannot be paused, reversed, or negotiated. The steel is losing roughly one degree Celsius per minute. You have thirty to forty-five minutes to get it from the ladle into the caster. If anything in that window fails — a crane, a chemistry reading, a blocked nozzle — the heat is lost. Two hundred tonnes of steel, alloys, and electricity, gone.</p>
+  <p>Two words came into your vocabulary this week: <em>ramp up</em> and <em>moat</em>. They arrived from different directions — one from Steelwatch, one from a notepad at the desk — but they describe the same underlying structure. Every serious endeavour has a ramp and a moat. The ramp is the period of building. The moat is what remains once the building is done.</p>
 
-  <p>Engineers call it the liquid clock. The entire plant is organised around it.</p>
+  <p>SSAB's Luleå mill is currently on the ramp. Prime yield in the first year of a new electric arc furnace operation runs at sixty to seventy-five percent — meaning a quarter of what the mill produces does not meet specification and must be recycled or sold at a discount. Energy costs are high because the scheduling system has not yet learned how to exploit the Nord Pool price curve. Automotive customers are withholding their qualification certificates because the process has not yet demonstrated sufficient consistency. The plant is losing money, and it knows it, and it continues anyway — because the ramp is the price of the moat.</p>
 
-  <p>What makes the SSAB Luleå mill so interesting from a systems perspective is that this ancient constraint — liquid steel that won't wait — is now wrapped in a web of entirely new constraints that are specific to this plant, this decade, and this location in northern Sweden. The electricity price on Nord Pool varies by the hour, and the electric arc furnace draws enough power to shift that calculation meaningfully. Cheap electricity mostly comes at night. But from month forty-nine of operations onward, a noise permit restricts certain outdoor activities after ten in the evening. Cheap power and quiet nights pull in opposite directions.</p>
+  <p>The moat in this case is the HYBRIT supply chain: a dedicated flow of fossil-free direct reduced iron, produced with green hydrogen, arriving by rail from Gällivare. No other European steelmaker has this. The closest competitors are years behind. By the time they catch up — if they do — SSAB will have four or five years of operational data, mature automotive qualifications, and a cost curve that looks very different from today's. The ramp is painful. The moat is the point.</p>
 
-  <p>Then there is the zinc budget. The continuous galvanising line coats steel strip by passing it through a bath of molten zinc at 460°C. Air knives control the coating thickness. Zinc evaporates. The environmental permit allows 2,500 kilograms of zinc emissions to atmosphere per year — the regulator halved the original application. The scheduler must track cumulative zinc consumption in real time, the way a diver tracks remaining air. When the budget runs low, galvanising stops, regardless of what the order book says.</p>
+  <blockquote>The wider the moat, the more painful the ramp required to dig it.</blockquote>
 
-  <blockquote>A blast furnace cannot be timed. An electric arc furnace can. That difference is where the whole scheduling advantage lives.</blockquote>
+  <p>This is not specific to steelmaking. The apartment you are leaving in mild disorder before the weekend has its own version of this problem. The chaos did not arrive in a single event — it accumulated through a series of small decisions made without thought. Each object placed without intention is a tiny ramp in the wrong direction, a small widening of the disorder's moat. The fix you named — <em>pause before setting something aside</em> — is not a cleaning strategy. It is a ramp-up in the right direction. It will feel slow and deliberate for a while, and then it will become automatic, and then it will be the moat: a habit so embedded that disorder cannot easily get back in.</p>
 
-  <p>And yet: more flexibility does not automatically mean better outcomes. The SSAB planning system, built on PSImetals, must simultaneously honour the liquid clock, the electricity price curve, the zinc budget, the DRI supply rhythm arriving from Gällivare 120 kilometres north, and the night noise restriction. Seven software modules share a single data model. Human planners add the layer the algorithm cannot model: a key automotive customer threatening to switch, a DRI ship delayed by ice on the Gulf of Bothnia, a grade qualification test due before the quarter closes.</p>
+  <p>The ramp phase is characterised by effort that feels disproportionate to results. You correct the same German error three days in a row — <em>ist</em>, not <em>is</em> — and it still appears. That is normal. The ramp is long. But each correction is a deposit into a habit that will eventually become effortless. The moat of fluency is built one corrected sentence at a time.</p>
 
-  <p>The lesson is not that complexity is bad. The lesson is that every constraint is a choice someone made — or a law of physics someone discovered — and the system's job is to honour all of them simultaneously without pretending any of them doesn't exist.</p>
-
-  <p>The liquid clock was always there. The zinc budget was added by a regulator in 2024. The electricity price curve is an economic signal from the Nordic grid. The night noise limit is a promise made to the residents of Luleå. All four are real. None cancels the others.</p>
-
-  <p>There is something clarifying about working with materials that have no patience. Steel at 1,550°C does not care about your planning horizon or your software architecture. It cools. You either move fast enough or you don't.</p>
-
-  <p>Parts 9 through 12 — logistics, labour, economics, and risk — come next. They will build the picture outward from the plant floor to the market, to the workforce, to the strategic bet SSAB is making on the future of green steel. But the foundation is always the liquid clock. Everything else is organised around the fact that the steel will not wait.</p>
+  <p>Poznań this weekend is neither ramp nor moat — it is the thing both exist to protect. The people, the animals, the unhurried evenings. That is what the ramp is for.</p>
 </section>
 
-<!-- 8. DEEPER -->
+<!-- 9. DEEPER -->
 <section class="section" id="deeper">
-  <div class="section-eyebrow">Deeper · 30 min</div>
-  <h2>Steelwatch: Run 1 — Parts 1–8</h2>
+  <div class="eyebrow">Deeper · 30 min</div>
+  <h2>Steelwatch: Feedback on Run 1</h2>
+  <div class="steelwatch-badge">📍 Steelwatch · Learning Feedback · Parts 1–8</div>
 
-  <div class="steelwatch-badge">📍 Steelwatch · SSAB Luleå · Learning Guide</div>
+  <p>You completed Parts 1–8 of the Luleå learning guide yesterday. Here is an honest assessment of what landed, what needs reinforcing, and what to watch for in Parts 9–12.</p>
 
-  <p>Yesterday you completed the first eight parts of the Luleå learning guide — a 667-line overview of the full steel production process from iron ore in the ground to certified coil in the shipping hall. Here is the map of what you now know.</p>
-
-  <div class="parts-grid">
-    <div class="part-card">
-      <div class="num">Part 1</div>
-      <div class="title">Raw Materials</div>
-      <div class="note">HYBRIT / DRI / HBI — iron ore reduced with hydrogen in Gällivare; sponge iron by rail to Luleå. Scrap as complement. Zinc from galvanised scrap enters EAF dust, not air.</div>
-    </div>
-    <div class="part-card">
-      <div class="num">Part 2</div>
-      <div class="title">Electricity & Energy</div>
-      <div class="note">2.7–3.4 TWh/yr for the mill; 400–600 MW peak. SE1 price zone = 30–50% cheaper than SE3. Svartbyn grid station = critical path, delayed 12 months to 2029. Q-One power feeder smooths EAF load.</div>
-    </div>
-    <div class="part-card">
-      <div class="num">Part 3</div>
-      <div class="title">Melt Shop</div>
-      <div class="note">Two Danieli Digimelter EAFs. ECS continuous charging. The heel — 20–30t left to keep the arc alive. LIMS chemistry loop: sample → spectrometer → alloy correction in 3–5 min. 33–45 min tap-to-tap.</div>
-    </div>
-    <div class="part-card">
-      <div class="num">Part 4</div>
-      <div class="title">Casting & Hot Rolling</div>
-      <div class="note">QSP-DUE: caster + rolling mill direct-coupled. No reheating furnace. Slab exits at 900–1000°C, induction heater tops up, straight into the mill. TMCP for STRENX. End of Danieli scope.</div>
-    </div>
-    <div class="part-card">
-      <div class="num">Part 5</div>
-      <div class="title">Cold Complex</div>
-      <div class="note">SMS group: pickling → PLTCM cold rolling → CAL annealing → CGL galvanising. Zinc-to-air cap: 2,500 kg/yr. That cap is the CGL scheduling constraint.</div>
-    </div>
-    <div class="part-card">
-      <div class="num">Part 6</div>
-      <div class="title">Grades & Campaigns</div>
-      <div class="note">STRENX: microalloying + TMCP. HARDOX: higher carbon + Q&T at Oxelösund. Four Luleå constraints: electricity price / zinc budget / DRI supply / night noise.</div>
-    </div>
-    <div class="part-card">
-      <div class="num">Part 7</div>
-      <div class="title">Planning & Scheduling</div>
-      <div class="note">Three horizons: 4–12 weeks / 1–7 days / real-time. PSImetals: 7 modules, single data model. Nord Pool ingested as scheduling input. Human planners add tacit knowledge the algorithm cannot model.</div>
-    </div>
-    <div class="part-card">
-      <div class="num">Part 8</div>
-      <div class="title">Quality & Certification</div>
-      <div class="note">EN 10204 3.1 standard. Automotive qualification: 18–36 months, plant-specific. Ramp-up yield curve: 60–75% → 92–95% over 4–5 years. Fossil-free cert needs separate documentation chain.</div>
-    </div>
-  </div>
-
-  <div class="deeper-block" style="margin-top: 32px;">
-    <h3>Coming next: Parts 9–12</h3>
-    <p>The remaining four parts complete Run 1:</p>
-    <p><strong>Part 9</strong> — Logistics and Customers: how coils leave the plant, which customers buy what, and why the Luleå→Borlänge slab shuttle disappears after commissioning.</p>
-    <p><strong>Part 10</strong> — Labour and the Human Side: workforce scale, union structure, the knowledge transfer challenge of building a new plant next to the old one.</p>
-    <p><strong>Part 11</strong> — Economics and Strategy: the business case for green premium, the ramp-up financial model, SSAB's position in the broader Nordic green steel cluster.</p>
-    <p><strong>Part 12</strong> — Risks and What Can Go Wrong: the full risk register, grid dependency, DRI supply chain fragility, automotive qualification delays, and what a bad year looks like.</p>
+  <div class="deeper-block">
+    <h3>What is solid</h3>
+    <p><strong>The physical process.</strong> You have a clear mental model of the flow: DRI from Gällivare → EAF melt shop → QSP-DUE caster/roller → cold complex (pickling → PLTCM → CAL → CGL). You can describe each step and name the key equipment (Danieli Digimelter, SMS Group cold complex, PSImetals planning system).</p>
+    <p><strong>The four constraints.</strong> Electricity price / zinc budget / DRI supply rhythm / night noise restriction — you absorbed these as a set and understand how they interact. This is the most important conceptual framework in the guide.</p>
+    <p><strong>The liquid clock.</strong> The 30–45 minute tap-to-tap window is visceral for you now. That understanding will anchor everything in Parts 9–12.</p>
   </div>
 
   <div class="deeper-block">
-    <h3>One concept to sit with</h3>
-    <p>The <strong>liquid clock</strong>: from the moment the EAF taps, the steel loses ~1°C per minute. The entire plant is organised around a 30–45 minute window that cannot be paused. Every investment in the melt shop — the ECS system, the LIMS loop, the ladle furnace — exists to protect that window. Most planning systems treat time as a resource to be allocated. In steelmaking, time is a constraint that the material enforces without negotiation.</p>
+    <h3>What needs reinforcing</h3>
+    <p><strong>Grade distinction.</strong> STRENX (microalloying + TMCP, produced at Luleå) vs HARDOX (higher carbon + quench and temper, produced at Oxelösund) — the difference is clear, but the <em>why</em> of each grade's properties could be sharper. STRENX is structural steel for load-bearing applications; HARDOX is wear-resistant, used where abrasion is the primary force. Different customers, different supply chains.</p>
+    <p><strong>The ramp-up yield curve.</strong> 60–75% prime yield in year one, 92–95% by year four or five. You know the numbers — do you know <em>why</em> yield improves? It is a combination of: chemistry calibration (the LIMS loop getting better data), operator skill accumulation, and automotive customers gradually granting qualifications that allow higher-specification production. The yield curve is a learning curve.</p>
+    <p><strong>Svartbyn grid station.</strong> This is the critical path for full-capacity operation — delayed 12 months to 2029. It means the mill cannot run at full power until then. Keep this in mind when reading the economics in Part 11.</p>
+  </div>
+
+  <div class="deeper-block">
+    <h3>Watch for in Parts 9–12</h3>
+    <p><strong>Part 9 — Logistics:</strong> The Luleå→Borlänge slab shuttle disappears post-commissioning because the QSP-DUE produces finished coil directly — no intermediate slab transfer needed. Watch how the logistics map changes.</p>
+    <p><strong>Part 11 — Economics:</strong> The green steel premium (how much more customers pay for fossil-free certification) is the number everything else is built around. Watch whether the guide gives a range, and whether it holds up against the grid delay.</p>
+    <p><strong>Part 12 — Risks:</strong> DRI supply chain fragility is the one to watch. The HYBRIT plant in Gällivare is new technology. A six-month DRI supply interruption is not unthinkable, and the Luleå mill has no blast furnace to fall back on. How does the risk register treat this?</p>
+  </div>
+
+  <div class="deeper-block">
+    <h3>One question to carry into Parts 9–12</h3>
+    <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 17px; color: var(--gold);">If the Svartbyn grid station is delayed a further 18 months — to 2030 or 2031 — what does that do to the ramp-up yield curve and the economics of the green premium?</p>
+    <p>Keep this question open as you read. Part 11 should answer it, at least partially.</p>
   </div>
 </section>
 
 <script>
-  const sections = ['pulse','mind','berlin','word','coach','german','read','deeper'];
+  const sections = ['pulse','mind','berlin','word','coach','german','exercises','read','deeper'];
   const dots = document.querySelectorAll('.rail-dot');
 
   function updateRail() {
@@ -612,6 +431,64 @@
 
   window.addEventListener('scroll', updateRail, { passive: true });
   updateRail();
+
+  function normalise(s) {
+    return s.trim().toLowerCase()
+      .replace(/ü/g, 'ü').replace(/ö/g, 'ö').replace(/ä/g, 'ä');
+  }
+
+  function checkAnswer(btn) {
+    const row = btn.closest('.ex-item');
+    const input = row.querySelector('.ex-input');
+    const feedback = row.querySelector('.ex-feedback');
+    const answer = input.dataset.answer;
+    const explanation = input.dataset.explanation;
+    const val = input.value.trim();
+
+    if (!val) return;
+
+    const correct = normalise(val) === normalise(answer);
+    input.classList.remove('correct', 'wrong');
+    input.classList.add(correct ? 'correct' : 'wrong');
+    feedback.className = 'ex-feedback ' + (correct ? 'correct' : 'wrong');
+    feedback.style.display = 'block';
+
+    if (correct) {
+      feedback.textContent = '✓ Correct. ' + explanation;
+    } else {
+      feedback.textContent = '✗ Answer: ' + answer + '. ' + explanation;
+      input.value = '';
+      setTimeout(() => { input.classList.remove('wrong'); }, 1200);
+    }
+
+    btn.disabled = correct;
+    checkSetComplete(btn.closest('.exercise-set'));
+  }
+
+  function checkSetComplete(set) {
+    const items = set.querySelectorAll('.ex-item');
+    const done = [...items].filter(i => i.querySelector('.ex-input').classList.contains('correct')).length;
+    const scoreEl = set.querySelector('.ex-score');
+    const resetEl = set.querySelector('.ex-reset');
+    if (done === items.length) {
+      scoreEl.textContent = '✓ All correct — ' + done + '/' + items.length;
+      scoreEl.style.display = 'block';
+      resetEl.style.display = 'inline-block';
+    }
+  }
+
+  function resetSet(setId, scoreId, resetId) {
+    const set = document.getElementById(setId);
+    set.querySelectorAll('.ex-input').forEach(i => {
+      i.value = ''; i.className = 'ex-input';
+    });
+    set.querySelectorAll('.ex-feedback').forEach(f => {
+      f.style.display = 'none'; f.textContent = '';
+    });
+    set.querySelectorAll('.ex-btn').forEach(b => b.disabled = false);
+    document.getElementById(scoreId).style.display = 'none';
+    document.getElementById(resetId).style.display = 'none';
+  }
 </script>
 </body>
 </html>
