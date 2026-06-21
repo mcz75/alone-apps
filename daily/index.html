@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>alone · daily · 2026-06-20</title>
+<title>alone · daily · 2026-06-21</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -18,496 +18,117 @@
     --rail-width: 32px;
     --accent-green: #5a8a5a;
     --accent-red: #c05050;
-    --steel-blue: #4a6a8a;
-    --steel-glow: #6a9abf;
+    --engine-blue: #4a7a9a;
+    --engine-glow: #7ab4d4;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-weight: 300; line-height: 1.7; min-height: 100vh; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 300;
-    line-height: 1.7;
-    min-height: 100vh;
-  }
+  .rail { position: fixed; left: 0; top: 0; bottom: 0; width: var(--rail-width); background: #0a0908; display: flex; flex-direction: column; align-items: center; padding: 2rem 0; z-index: 100; border-right: 1px solid #1e1c19; }
+  .rail-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold-dim); opacity: 0.3; cursor: pointer; transition: all 0.3s; flex-shrink: 0; margin: 10px 0; }
+  .rail-dot.active { background: var(--gold); opacity: 1; transform: scale(1.4); box-shadow: 0 0 8px var(--gold); }
+  .rail-line { flex: 1; width: 1px; background: linear-gradient(to bottom, transparent, var(--gold-dim) 30%, var(--gold-dim) 70%, transparent); opacity: 0.2; min-height: 20px; max-height: 40px; }
 
-  /* READING RAIL */
-  .rail {
-    position: fixed;
-    left: 0; top: 0; bottom: 0;
-    width: var(--rail-width);
-    background: #0a0908;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem 0;
-    gap: 0;
-    z-index: 100;
-    border-right: 1px solid #1e1c19;
-  }
+  main { margin-left: var(--rail-width); max-width: 720px; padding: 0 2rem 6rem 2.5rem; }
 
-  .rail-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--gold-dim);
-    opacity: 0.3;
-    cursor: pointer;
-    transition: all 0.3s;
-    flex-shrink: 0;
-    margin: 10px 0;
-  }
+  .masthead { padding: 2.5rem 0 1.5rem; border-bottom: 1px solid #2a2820; }
+  .masthead-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 0.4rem; }
+  .masthead-date { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--gold); font-weight: 400; }
+  .masthead-sub { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--text-dim); margin-top: 0.3rem; letter-spacing: 0.05em; }
 
-  .rail-dot.active {
-    background: var(--gold);
-    opacity: 1;
-    transform: scale(1.4);
-    box-shadow: 0 0 8px var(--gold);
-  }
-
-  .rail-line {
-    flex: 1;
-    width: 1px;
-    background: linear-gradient(to bottom, transparent, var(--gold-dim) 30%, var(--gold-dim) 70%, transparent);
-    opacity: 0.2;
-    min-height: 20px;
-    max-height: 40px;
-  }
-
-  /* MAIN */
-  main {
-    margin-left: var(--rail-width);
-    max-width: 720px;
-    padding: 0 2rem 6rem 2.5rem;
-  }
-
-  /* HEADER */
-  .masthead {
-    padding: 2.5rem 0 1.5rem;
-    border-bottom: 1px solid #2a2820;
-    margin-bottom: 0;
-  }
-
-  .masthead-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    color: var(--gold-dim);
-    text-transform: uppercase;
-    margin-bottom: 0.4rem;
-  }
-
-  .masthead-date {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    color: var(--gold);
-    font-weight: 400;
-  }
-
-  .masthead-sub {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text-dim);
-    margin-top: 0.3rem;
-    letter-spacing: 0.05em;
-  }
-
-  /* SECTIONS */
-  .section {
-    padding: 2.5rem 0;
-    border-bottom: 1px solid #1e1c19;
-  }
-
+  .section { padding: 2.5rem 0; border-bottom: 1px solid #1e1c19; }
   .section:last-child { border-bottom: none; }
-
-  .section-eyebrow {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.25em;
-    color: var(--gold-dim);
-    text-transform: uppercase;
-    margin-bottom: 0.6rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
-
-  .section-eyebrow::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, var(--gold-dim), transparent);
-    opacity: 0.3;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    font-weight: 400;
-    color: var(--text);
-    margin-bottom: 1rem;
-    line-height: 1.3;
-  }
-
+  .section-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.25em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.8rem; }
+  .section-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--gold-dim), transparent); opacity: 0.3; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 400; color: var(--text); margin-bottom: 1rem; line-height: 1.3; }
   p { margin-bottom: 0.9rem; color: var(--text); }
   p:last-child { margin-bottom: 0; }
 
-  /* PULSE */
-  .pulse-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.8rem;
-    margin-top: 0.5rem;
-  }
+  .pulse-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 0.5rem; }
+  .pulse-item { background: var(--surface); border: 1px solid #2a2820; border-radius: 4px; padding: 0.9rem 1rem; }
+  .pulse-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 0.3rem; }
+  .pulse-value { font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; color: var(--gold); }
+  .pulse-note { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem; font-style: italic; }
 
-  .pulse-item {
-    background: var(--surface);
-    border: 1px solid #2a2820;
-    border-radius: 4px;
-    padding: 0.9rem 1rem;
-  }
+  .word-headline { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); font-style: italic; margin-bottom: 0.3rem; }
+  .word-pos { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--gold-dim); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .word-example { border-left: 2px solid var(--gold-dim); padding-left: 1rem; color: var(--text-dim); font-style: italic; margin: 0.6rem 0; font-size: 0.9rem; }
 
-  .pulse-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    color: var(--gold-dim);
-    text-transform: uppercase;
-    margin-bottom: 0.3rem;
-  }
+  .correction-box { background: var(--surface); border: 1px solid #2a2820; border-radius: 4px; padding: 1.2rem 1.4rem; margin-top: 1rem; }
+  .correction-original { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--accent-red); text-decoration: line-through; margin-bottom: 0.4rem; }
+  .correction-fixed { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--accent-green); margin-bottom: 0.6rem; }
+  .correction-rule { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; }
+  .memory-hook { background: #12110f; border: 1px solid var(--gold-dim); border-radius: 4px; padding: 0.8rem 1rem; margin-top: 1rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--gold); opacity: 0.8; }
+  .memory-hook::before { content: '⚡ '; opacity: 0.7; }
 
-  .pulse-value {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.9rem;
-    color: var(--gold);
-  }
+  .german-phrase { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold); font-style: italic; margin: 1rem 0 0.3rem; line-height: 1.4; }
+  .german-translation { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 1rem; }
 
-  .pulse-note {
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    margin-top: 0.2rem;
-    font-style: italic;
-  }
-
-  /* WORD */
-  .word-headline {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: var(--gold);
-    font-style: italic;
-    margin-bottom: 0.3rem;
-  }
-
-  .word-pos {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--gold-dim);
-    letter-spacing: 0.15em;
-    margin-bottom: 1rem;
-  }
-
-  .word-example {
-    border-left: 2px solid var(--gold-dim);
-    padding-left: 1rem;
-    color: var(--text-dim);
-    font-style: italic;
-    margin: 0.6rem 0;
-    font-size: 0.9rem;
-  }
-
-  /* COACH */
-  .correction-box {
-    background: var(--surface);
-    border: 1px solid #2a2820;
-    border-radius: 4px;
-    padding: 1.2rem 1.4rem;
-    margin-top: 1rem;
-  }
-
-  .correction-original {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--accent-red);
-    text-decoration: line-through;
-    margin-bottom: 0.4rem;
-  }
-
-  .correction-fixed {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--accent-green);
-    margin-bottom: 0.6rem;
-  }
-
-  .correction-rule {
-    font-size: 0.82rem;
-    color: var(--text-dim);
-    line-height: 1.6;
-  }
-
-  .memory-hook {
-    background: #12110f;
-    border: 1px solid var(--gold-dim);
-    border-radius: 4px;
-    padding: 0.8rem 1rem;
-    margin-top: 1rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--gold);
-    opacity: 0.8;
-  }
-
-  .memory-hook::before {
-    content: '⚡ ';
-    opacity: 0.7;
-  }
-
-  /* GERMAN MINUTE */
-  .german-phrase {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    color: var(--gold);
-    font-style: italic;
-    margin: 1rem 0 0.3rem;
-    line-height: 1.4;
-  }
-
-  .german-translation {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    margin-bottom: 1rem;
-  }
-
-  /* EXERCISES */
   .exercise-set { margin-bottom: 2rem; }
-
-  .exercise-lang-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    color: var(--gold-dim);
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid #2a2820;
-  }
-
-  .exercise-item {
-    margin-bottom: 1.2rem;
-    background: var(--surface);
-    border: 1px solid #2a2820;
-    border-radius: 4px;
-    padding: 1rem 1.2rem;
-    transition: border-color 0.2s;
-  }
-
-  .exercise-sentence {
-    font-size: 0.95rem;
-    color: var(--text);
-    margin-bottom: 0.7rem;
-    line-height: 1.6;
-  }
-
-  .exercise-blank {
-    display: inline-block;
-    min-width: 120px;
-    border-bottom: 1px solid var(--gold-dim);
-    margin: 0 4px;
-    vertical-align: bottom;
-    text-align: center;
-  }
-
-  .exercise-input-row {
-    display: flex;
-    gap: 0.6rem;
-    align-items: center;
-  }
-
-  .exercise-input {
-    background: #0a0908;
-    border: 1px solid #3a3830;
-    border-radius: 3px;
-    color: var(--text);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.85rem;
-    padding: 0.4rem 0.7rem;
-    flex: 1;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
+  .exercise-lang-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid #2a2820; }
+  .exercise-item { margin-bottom: 1.2rem; background: var(--surface); border: 1px solid #2a2820; border-radius: 4px; padding: 1rem 1.2rem; }
+  .exercise-sentence { font-size: 0.95rem; color: var(--text); margin-bottom: 0.7rem; line-height: 1.6; }
+  .exercise-input-row { display: flex; gap: 0.6rem; align-items: center; }
+  .exercise-input { background: #0a0908; border: 1px solid #3a3830; border-radius: 3px; color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; padding: 0.4rem 0.7rem; flex: 1; outline: none; transition: border-color 0.2s; }
   .exercise-input:focus { border-color: var(--gold-dim); }
   .exercise-input.correct { border-color: var(--accent-green); background: #0d1a0d; }
   .exercise-input.wrong { border-color: var(--accent-red); background: #1a0d0d; }
-
-  .check-btn {
-    background: transparent;
-    border: 1px solid var(--gold-dim);
-    color: var(--gold);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 3px;
-    cursor: pointer;
-    letter-spacing: 0.1em;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-
+  .check-btn { background: transparent; border: 1px solid var(--gold-dim); color: var(--gold); font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; padding: 0.4rem 0.8rem; border-radius: 3px; cursor: pointer; letter-spacing: 0.1em; transition: all 0.2s; white-space: nowrap; }
   .check-btn:hover { background: var(--gold); color: var(--bg); }
-
-  .exercise-feedback {
-    margin-top: 0.6rem;
-    font-size: 0.78rem;
-    line-height: 1.5;
-    display: none;
-  }
-
+  .exercise-feedback { margin-top: 0.6rem; font-size: 0.78rem; line-height: 1.5; display: none; }
   .exercise-feedback.correct-fb { color: var(--accent-green); }
   .exercise-feedback.wrong-fb { color: #d07070; }
 
-  /* READ SECTION — parchment */
-  .section.read {
-    background: var(--parchment);
-    margin-left: calc(-2.5rem);
-    padding-left: 2.5rem;
-    margin-right: calc(-2rem);
-    padding-right: 2rem;
-  }
-
+  .section.read { background: var(--parchment); margin-left: calc(-2.5rem); padding-left: 2.5rem; margin-right: calc(-2rem); padding-right: 2rem; }
   .section.read .section-eyebrow { color: #8a7848; }
   .section.read .section-eyebrow::after { background: linear-gradient(to right, #8a7848, transparent); }
   .section.read .section-title { color: var(--parchment-text); }
   .section.read p { color: #3a3020; }
 
-  /* STEELWATCH */
-  .steel-card {
-    background: var(--surface);
-    border: 1px solid var(--steel-blue);
-    border-radius: 4px;
-    padding: 1.2rem 1.4rem;
-    margin-bottom: 1rem;
-    position: relative;
-    overflow: hidden;
-  }
+  .engine-card { background: var(--surface); border: 1px solid var(--engine-blue); border-radius: 4px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; position: relative; overflow: hidden; }
+  .engine-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: linear-gradient(to bottom, var(--engine-glow), var(--engine-blue)); }
+  .engine-card-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--engine-glow); text-transform: uppercase; margin-bottom: 0.5rem; }
+  .engine-card-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--text); margin-bottom: 0.6rem; }
+  .engine-card-body { font-size: 0.85rem; color: var(--text-dim); line-height: 1.65; }
+  .engine-q { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: var(--engine-glow); border-left: 2px solid var(--engine-blue); padding: 0.5rem 0.8rem; margin: 0.8rem 0 0; line-height: 1.6; font-style: italic; }
 
-  .steel-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: linear-gradient(to bottom, var(--steel-glow), var(--steel-blue));
-  }
+  .deeper-block { background: var(--surface); border: 1px solid #2a2820; border-radius: 4px; padding: 1.4rem; margin-top: 1rem; }
+  .deeper-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 0.6rem; }
 
-  .steel-card-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    color: var(--steel-glow);
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-
-  .steel-card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    color: var(--text);
-    margin-bottom: 0.6rem;
-    line-height: 1.4;
-  }
-
-  .steel-card-body {
-    font-size: 0.85rem;
-    color: var(--text-dim);
-    line-height: 1.65;
-  }
-
-  .steel-tag {
-    display: inline-block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    padding: 0.15rem 0.5rem;
-    border-radius: 2px;
-    letter-spacing: 0.1em;
-    margin-right: 0.4rem;
-    margin-top: 0.6rem;
-  }
-
-  .tag-confirmed { background: #1a3a1a; color: #70c070; border: 1px solid #2a5a2a; }
-  .tag-open { background: #1a1a3a; color: #7070c0; border: 1px solid #2a2a5a; }
-  .tag-risk { background: #3a1a1a; color: #c07070; border: 1px solid #5a2a2a; }
-
-  .steel-question {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--steel-glow);
-    border-left: 2px solid var(--steel-blue);
-    padding: 0.5rem 0.8rem;
-    margin: 0.8rem 0 0;
-    line-height: 1.6;
-    font-style: italic;
-  }
-
-  /* DEEPER */
-  .deeper-block {
-    background: var(--surface);
-    border: 1px solid #2a2820;
-    border-radius: 4px;
-    padding: 1.4rem;
-    margin-top: 1rem;
-  }
-
-  .deeper-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    color: var(--gold-dim);
-    text-transform: uppercase;
-    margin-bottom: 0.6rem;
-  }
-
-  /* SCROLLBAR */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; opacity: 0.3; }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
 
-  @media (max-width: 600px) {
-    main { padding: 0 1rem 4rem 2.5rem; }
-    .pulse-grid { grid-template-columns: 1fr; }
-    .german-phrase { font-size: 1.1rem; }
-  }
+  @media (max-width: 600px) { main { padding: 0 1rem 4rem 2.5rem; } .pulse-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
-<!-- RAIL -->
 <nav class="rail" id="rail">
-  <div class="rail-dot active" onclick="scrollTo('pulse')" title="Pulse"></div>
+  <div class="rail-dot active" onclick="goTo('pulse')" title="Pulse"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" onclick="scrollTo('mind')" title="Mind"></div>
+  <div class="rail-dot" onclick="goTo('mind')" title="Mind"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" onclick="scrollTo('word')" title="Word"></div>
+  <div class="rail-dot" onclick="goTo('word')" title="Word"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" onclick="scrollTo('coach')" title="Coach"></div>
+  <div class="rail-dot" onclick="goTo('coach')" title="Coach"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" onclick="scrollTo('german')" title="German Minute"></div>
+  <div class="rail-dot" onclick="goTo('german')" title="German Minute"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" onclick="scrollTo('exercises')" title="Exercises"></div>
+  <div class="rail-dot" onclick="goTo('exercises')" title="Exercises"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" onclick="scrollTo('read')" title="Read"></div>
+  <div class="rail-dot" onclick="goTo('read')" title="Read"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" onclick="scrollTo('steelwatch')" title="Steelwatch"></div>
+  <div class="rail-dot" onclick="goTo('engine')" title="Engine"></div>
   <div class="rail-line"></div>
-  <div class="rail-dot" onclick="scrollTo('deeper')" title="Deeper"></div>
+  <div class="rail-dot" onclick="goTo('deeper')" title="Deeper"></div>
 </nav>
 
 <main>
   <header class="masthead">
     <div class="masthead-label">alone · daily</div>
-    <div class="masthead-date">Saturday, 20 June 2026</div>
-    <div class="masthead-sub">Poznań · weekend with Ania · solstice eve</div>
+    <div class="masthead-date">Sunday, 21 June 2026</div>
+    <div class="masthead-sub">Poznań · summer solstice · engine thinking day</div>
   </header>
 
   <!-- PULSE -->
@@ -518,32 +139,32 @@
       <div class="pulse-item">
         <div class="pulse-label">Location</div>
         <div class="pulse-value">Poznań</div>
-        <div class="pulse-note">Weekend with Ania — arrived late via Szczecin</div>
+        <div class="pulse-note">Weekend with Ania — last day before the week</div>
       </div>
       <div class="pulse-item">
-        <div class="pulse-label">Weather · Berlin</div>
-        <div class="pulse-value">22°C · sunny</div>
-        <div class="pulse-note">Summer solstice weekend — longest days of the year</div>
+        <div class="pulse-label">Day type</div>
+        <div class="pulse-value">Thinking + building</div>
+        <div class="pulse-note">alone-engine use cases → Ania app → Gemini threads</div>
       </div>
       <div class="pulse-item">
-        <div class="pulse-label">Yesterday</div>
-        <div class="pulse-value">Epic train adventure</div>
-        <div class="pulse-note">Berlin → Rzepin → Świebodzin → Rzepin → Szczecin → Poznań</div>
+        <div class="pulse-label">Sport</div>
+        <div class="pulse-value">Walk with dogs 🍺🍺</div>
+        <div class="pulse-note">Rest day from CrossFit — back to 6am Tuesday</div>
       </div>
       <div class="pulse-item">
-        <div class="pulse-label">Today's intention</div>
-        <div class="pulse-value">Rest. Be present.</div>
-        <div class="pulse-note">No CrossFit today — rest and Poznań time</div>
+        <div class="pulse-label">Solstice</div>
+        <div class="pulse-value">Longest day</div>
+        <div class="pulse-note">~17h of daylight in Poznań today</div>
       </div>
       <div class="pulse-item">
-        <div class="pulse-label">Calories · Fri</div>
-        <div class="pulse-value">~2,735 kcal</div>
-        <div class="pulse-note">High day — but you were on a train for 6h+</div>
+        <div class="pulse-label">Alcohol</div>
+        <div class="pulse-value">0 🍺🍺🍺</div>
+        <div class="pulse-note">Good weekend overall</div>
       </div>
       <div class="pulse-item">
-        <div class="pulse-label">Reminder</div>
+        <div class="pulse-label">⚠️ Reminder</div>
         <div class="pulse-value">PAT renewal</div>
-        <div class="pulse-note">Token expires early July — renew ~June 28</div>
+        <div class="pulse-note">Token expires early July — renew by June 28</div>
       </div>
     </div>
   </section>
@@ -552,42 +173,54 @@
   <section class="section" id="mind">
     <div class="section-eyebrow">Layer 2 · 5 min</div>
     <div class="section-title">Mind</div>
-    <p>Yesterday was one of those days that becomes a story. You left Berlin expecting a straightforward Friday evening train to Poznań. What followed was a geography lesson in Wielkopolska: Rzepin, Świebodzin, back to Rzepin, then north to Szczecin, then finally east to Poznań — arriving hours late, full of pierogi and schabowy, with a new German sentence about waiting for decisions formed somewhere near the Polish border.</p>
-    <p>There is something oddly fitting about learning <em>warten auf</em> — to wait for — while actually waiting. The language absorbed itself into the disruption. The train stood still and the grammar moved forward.</p>
-    <p>This morning you're at Ania's table with fried wiejskie eggs and toast. The deep orange yolks are evidence of a different kind of farming. Saturday. Solstice eve. The longest days of the year.</p>
+    <p>The longest day of the year, spent in Poznań with a plan that is partly technical and partly architectural. The alone-engine use-case mapping is the kind of work that looks like thinking but is actually closer to drawing: you are trying to find the boundary between what belongs in the engine and what belongs in the instance, and that boundary only reveals itself when you push against it with concrete examples.</p>
+    <p>Today you have two modes of work: the abstract (use cases, engine spec) and the concrete (Ania's GitHub app, Gemini threads). The concrete work is good for the abstract — building something real for someone else forces precision about what the engine actually needs to do.</p>
+    <p>You went for a walk with the dogs first. That was the right order.</p>
   </section>
 
   <!-- WORD -->
   <section class="section" id="word">
     <div class="section-eyebrow">Layer 3 · 10 min</div>
     <div class="section-title">Word</div>
-    <div class="word-headline">der Umweg</div>
-    <div class="word-pos">NOUN · masculine · /ˈʊmveːk/</div>
-    <p>A detour. The long way around. Literally <em>Um</em> (around) + <em>Weg</em> (way/path). It can describe a physical route or a figurative digression — a winding path to the same destination.</p>
-    <div class="word-example">"Das war ein großer Umweg." — That was quite a detour.</div>
-    <div class="word-example">"Wir sind über Szczecin gefahren — ein langer Umweg wegen der kaputten Oberleitung." — We travelled via Szczecin — a long detour because of the broken overhead wire.</div>
-    <div class="word-example">"Manchmal führt der Umweg zum schöneren Ziel." — Sometimes the detour leads to the more beautiful destination.</div>
-    <p style="margin-top:1rem; font-size:0.85rem; color:var(--text-dim);">Companion word: <strong>der Weg</strong> (way, path, route) — appears in dozens of German compounds: <em>Ausweg</em> (way out), <em>Einweg</em> (one-way), <em>Wegweiser</em> (signpost), <em>unterwegs</em> (on the way).</p>
+    <div class="word-headline">to resolve</div>
+    <div class="word-pos">VERB · /rɪˈzɒlv/ · C1 register</div>
+    <p>To settle or find a solution to something — especially a problem, dispute, or open situation. More deliberate than <em>solve</em> (which implies a puzzle with one answer) and more final than <em>sort out</em> (which is informal). <em>Resolve</em> implies bringing something to a satisfying conclusion through effort or decision.</p>
+    <div class="word-example">"In the evening I'll resolve some open threads in my work project." ✓</div>
+    <div class="word-example">"The team resolved the conflict after a long discussion."</div>
+    <div class="word-example">"The issue was resolved within 48 hours." — natural in professional writing</div>
+    <p style="margin-top:1rem; font-size:0.85rem; color:var(--text-dim);">
+      Compare: <strong>solve</strong> (a puzzle, a maths problem — one correct answer) · <strong>resolve</strong> (a conflict, a thread, a situation — requires judgement) · <strong>sort out</strong> (informal British; fine in speech, avoid in writing).
+    </p>
+    <div class="word-example">"*solve* some threads" ✗ — threads aren't puzzles<br>"*resolve* some threads" ✓ — threads require a decision</div>
   </section>
 
   <!-- COACH -->
   <section class="section" id="coach">
     <div class="section-eyebrow">Layer 3 · 10 min</div>
     <div class="section-title">Coach — Today's Pattern</div>
-    <p>From this session: <strong>warten auf takes the accusative — always.</strong> This pattern came up in the train disruption and caught you out. Here's how to lock it in.</p>
+    <p>Two patterns from today worth carrying: <strong>platforms use <em>on</em></strong>, and <strong>verbs vs nouns in compound forms</strong>.</p>
 
     <div class="correction-box">
-      <div class="correction-original">Wir warten auf die Entscheidung. (with "für")</div>
-      <div class="correction-fixed">Wir warten auf eine Entscheidung. ✓</div>
+      <div class="correction-original">in github</div>
+      <div class="correction-fixed">on GitHub ✓</div>
       <div class="correction-rule">
-        <strong>Rule:</strong> <em>warten</em> governs <em>auf + accusative</em> — not <em>für</em>, not <em>auf + dative</em>. The article must also be present: <em>eine Entscheidung</em>, not <em>Entscheidung</em> alone.<br><br>
-        <strong>Pattern:</strong> Ich warte auf <em>den</em> Bus · <em>die</em> E-Mail · <em>das</em> Ergebnis · <em>eine</em> Entscheidung.
+        <strong>Rule:</strong> Digital platforms, social networks, and services take <em>on</em> — not <em>in</em>.<br>
+        On GitHub · on Slack · on LinkedIn · on Instagram · on Todoist<br><br>
+        <em>In</em> = physical space or document: "in the file", "in the database", "in the repo". The platform itself is <em>on</em>.
       </div>
     </div>
 
-    <div class="memory-hook">Movement takes accusative. Waiting <em>moves toward</em> something — so accusative. Same logic as "in den Bus einsteigen."</div>
+    <div class="correction-box" style="margin-top:1rem;">
+      <div class="correction-original">setup app for Ania</div>
+      <div class="correction-fixed">set up an app for Ania ✓</div>
+      <div class="correction-rule">
+        <strong>Setup</strong> (one word) = noun: "the setup is complete", "a quick setup".<br>
+        <strong>Set up</strong> (two words) = verb: "I need to set up an app", "she set it up".<br><br>
+        Same pattern: <em>login/log in</em> · <em>backup/back up</em> · <em>checkout/check out</em>.
+      </div>
+    </div>
 
-    <p style="margin-top:1.2rem; font-size:0.85rem; color:var(--text-dim);">Session also featured strong use of <em>um...zu</em> (purpose clause) with the comma placed correctly and <em>zurück</em> correctly positioned at the end of its clause. These are B2+ constructions used naturally — worth noting.</p>
+    <div class="memory-hook">On a platform, in a file. You stand on a platform; you write in a file.</div>
   </section>
 
   <!-- GERMAN MINUTE -->
@@ -595,16 +228,17 @@
     <div class="section-eyebrow">Layer 3 · 10 min</div>
     <div class="section-title">German Minute — Carry This Today</div>
 
-    <div class="german-phrase">sich etwas gönnen</div>
-    <div class="german-translation">to treat yourself · to allow yourself something · to grant yourself a pleasure</div>
+    <div class="german-phrase">instanzunabhängig</div>
+    <div class="german-translation">instance-agnostic · from: Instanz (instance) + un- (not) + abhängig (dependent)</div>
 
-    <p>One of the most distinctly German expressions — warm, guilt-free, deeply ordinary in native speech. You <em>gönnen</em> yourself a coffee, a slow Saturday morning, a plate of pierogi on a delayed train. It implies you've earned it, or simply that you deserve it because you're human.</p>
+    <p>A compound adjective that describes the core design principle of the alone-engine: the engine must not depend on any particular instance. It holds the rules; the instances hold the data. <em>Instanzunabhängig</em> is exactly the kind of precise compound German builds naturally — where English needs a hyphenated phrase, German makes it one word.</p>
 
-    <div class="word-example">"Gönn dir das." — Treat yourself to it. / You deserve it.</div>
-    <div class="word-example">"Ich gönne mir heute einen freien Tag." — I'm allowing myself a day off today.</div>
-    <div class="word-example">"Das habe ich mir verdient." — I earned this. (companion phrase)</div>
+    <div class="word-example">*Die Engine muss instanzunabhängig sein.* — The engine must be instance-agnostic.</div>
+    <div class="word-example">*Die Regeln sind instanzunabhängig; die Daten gehören zur Instanz.* — The rules are instance-agnostic; the data belongs to the instance.</div>
 
-    <p style="margin-top:1rem; font-size:0.85rem; color:var(--text-dim);">The opposite: <em>sich etwas versagen</em> — to deny yourself something. Knowing both gives you the full register. <br><br>Today's Saturday in Poznań: <em>Gönn dir's.</em></p>
+    <p style="margin-top:1rem; font-size:0.85rem; color:var(--text-dim);">
+      German compound anatomy: <em>Instanz</em> (instance) + <em>un-</em> (negation prefix) + <em>abhängig</em> (dependent, from <em>abhängen</em> — to depend on). The prefix <em>un-</em> works exactly like English <em>un-</em>: <em>unmöglich</em> (impossible), <em>unfair</em> (unfair), <em>unabhängig</em> (independent).
+    </p>
   </section>
 
   <!-- EXERCISES -->
@@ -612,83 +246,81 @@
     <div class="section-eyebrow">Layer 3 · 10–15 min</div>
     <div class="section-title">Exercises</div>
 
-    <!-- German exercises -->
     <div class="exercise-set">
-      <div class="exercise-lang-label">German — separable verbs · prepositions · umlauts</div>
+      <div class="exercise-lang-label">German — prepositions · separable verbs · umlauts</div>
 
       <div class="exercise-item" id="de1">
-        <div class="exercise-sentence">Wir <span class="exercise-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> an der nächsten Station in den Ersatzbus um. <br><small style="color:var(--text-dim); font-size:0.75rem;">(we must / müssen + umsteigen)</small></div>
+        <div class="exercise-sentence">Wir <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:80px;">&nbsp;</span> in Rzepin auf eine Entscheidung. <br><small style="color:var(--text-dim);font-size:0.75rem;">(we waited — Präteritum of warten)</small></div>
         <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type the missing word..." id="de1-input">
-          <button class="check-btn" onclick="checkDe('de1','müssen','Umlaut required: mü — not mussen. The conjugated form of müssen for wir is müssen.')">Check</button>
+          <input class="exercise-input" placeholder="type here..." id="de1-in">
+          <button class="check-btn" onclick="chk('de1','warteten','Präteritum of warten = warteten. Note: warten auf + accusative — always auf, never für.')">Check</button>
         </div>
         <div class="exercise-feedback" id="de1-fb"></div>
       </div>
 
       <div class="exercise-item" id="de2">
-        <div class="exercise-sentence">Ich warte <span class="exercise-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> den nächsten Zug. <br><small style="color:var(--text-dim); font-size:0.75rem;">(warten auf — which preposition?)</small></div>
+        <div class="exercise-sentence">Ich <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:80px;">&nbsp;</span> mir heute einen freien Tag. <br><small style="color:var(--text-dim);font-size:0.75rem;">(I'm treating myself to — sich gönnen, ich-form)</small></div>
         <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type the missing word..." id="de2-input">
-          <button class="check-btn" onclick="checkDe('de2','auf','warten auf + accusative — always auf, never für or nach.')">Check</button>
+          <input class="exercise-input" placeholder="type here..." id="de2-in">
+          <button class="check-btn" onclick="chk('de2','gönne','sich gönnen → ich gönne mir. Don\'t forget the umlaut: ö.')">Check</button>
         </div>
         <div class="exercise-feedback" id="de2-fb"></div>
       </div>
 
       <div class="exercise-item" id="de3">
-        <div class="exercise-sentence">Wir fahren nach Rzepin zurück, um dort auf eine Entscheidung zu <span class="exercise-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>. <br><small style="color:var(--text-dim); font-size:0.75rem;">(to wait — infinitive form)</small></div>
+        <div class="exercise-sentence">Wir <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:120px;">&nbsp;</span> nach Szczecin <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:60px;">&nbsp;</span>.<br><small style="color:var(--text-dim);font-size:0.75rem;">(we drove — Präteritum of fahren, with a separable prefix meaning "further / onward")</small></div>
         <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type the missing word..." id="de3-input">
-          <button class="check-btn" onclick="checkDe('de3','warten','In um...zu clauses the infinitive goes at the very end. warten — to wait.')">Check</button>
+          <input class="exercise-input" placeholder="verb + prefix (two words)..." id="de3-in">
+          <button class="check-btn" onclick="chk('de3','fuhren weiter','weiterfahren — to continue driving. Separable: fuhren...weiter. Präteritum stem: fuhr.')">Check</button>
         </div>
         <div class="exercise-feedback" id="de3-fb"></div>
       </div>
 
       <div class="exercise-item" id="de4">
-        <div class="exercise-sentence">Die Oberleitung in Opalenica ist <span class="exercise-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>. <br><small style="color:var(--text-dim); font-size:0.75rem;">(broken / damaged — from today)</small></div>
+        <div class="exercise-sentence">Die Engine <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:120px;">&nbsp;</span> sein. <br><small style="color:var(--text-dim);font-size:0.75rem;">(must be instance-agnostic — today's new word)</small></div>
         <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type the missing word..." id="de4-input">
-          <button class="check-btn" onclick="checkDe('de4','beschädigt','beschädigt = damaged. kaputt also accepted — more colloquial but natural. The Oberleitung (overhead wire) is the traction system.')">Check</button>
+          <input class="exercise-input" placeholder="type here..." id="de4-in">
+          <button class="check-btn" onclick="chk('de4','muss instanzunabhängig','Die Engine muss instanzunabhängig sein. Modal verb muss + adjective at the end.')">Check</button>
         </div>
         <div class="exercise-feedback" id="de4-fb"></div>
       </div>
 
       <div class="exercise-item" id="de5">
-        <div class="exercise-sentence">Ich <span class="exercise-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> mir heute ein gutes Frühstück. <br><small style="color:var(--text-dim); font-size:0.75rem;">(to treat yourself to — sich gönnen, ich-form)</small></div>
+        <div class="exercise-sentence">Ich <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:80px;">&nbsp;</span> mir die Anwendungsfälle genau. <br><small style="color:var(--text-dim);font-size:0.75rem;">(I'm thinking through carefully — sich überlegen)</small></div>
         <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type the missing word..." id="de5-input">
-          <button class="check-btn" onclick="checkDe('de5','gönne','sich gönnen → ich gönne mir. Reflexive: the mir refers back to ich. Note the umlaut: gönne, not gonne.')">Check</button>
+          <input class="exercise-input" placeholder="type here..." id="de5-in">
+          <button class="check-btn" onclick="chk('de5','überlege','sich überlegen → ich überlege mir. Note the umlaut: ü. Means to think something through carefully.')">Check</button>
         </div>
         <div class="exercise-feedback" id="de5-fb"></div>
       </div>
     </div>
 
-    <!-- English exercises -->
     <div class="exercise-set">
-      <div class="exercise-lang-label">English C1 — articles · prepositions · register</div>
+      <div class="exercise-lang-label">English C1 — verbs · prepositions · register</div>
 
       <div class="exercise-item" id="en1">
-        <div class="exercise-sentence">She likes mayonnaise on <span class="exercise-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>. <br><small style="color:var(--text-dim); font-size:0.75rem;">(bread — with or without article?)</small></div>
+        <div class="exercise-sentence">I need to <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:80px;">&nbsp;</span> an app on GitHub for Ania. <br><small style="color:var(--text-dim);font-size:0.75rem;">(set up — verb or noun form?)</small></div>
         <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type the missing word(s)..." id="en1-input">
-          <button class="check-btn" onclick="checkEn('en1','bread','Uncountable nouns like bread, water, rice take no article in general statements. Bred is a common spelling slip — remember: ea vowel pair.')">Check</button>
+          <input class="exercise-input" placeholder="type here..." id="en1-in">
+          <button class="check-btn" onclick="chk('en1','set up','As a verb: two words — set up. One word (setup) is only the noun: "the setup is complete."')">Check</button>
         </div>
         <div class="exercise-feedback" id="en1-fb"></div>
       </div>
 
       <div class="exercise-item" id="en2">
-        <div class="exercise-sentence">The train was <span class="exercise-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> because of a broken overhead wire. <br><small style="color:var(--text-dim); font-size:0.75rem;">(delayed / stranded — choose the more precise word)</small></div>
+        <div class="exercise-sentence">The project is maintained <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:60px;">&nbsp;</span> GitHub. <br><small style="color:var(--text-dim);font-size:0.75rem;">(on / in / at?)</small></div>
         <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type the missing word..." id="en2-input">
-          <button class="check-btn" onclick="checkEn('en2','stranded','Stranded implies unable to move at all — more precise than delayed when the train physically cannot proceed. Delayed suggests it will arrive, eventually.')">Check</button>
+          <input class="exercise-input" placeholder="type here..." id="en2-in">
+          <button class="check-btn" onclick="chk('en2','on','Platforms take on: on GitHub, on Slack, on LinkedIn. In = physical space or document.')">Check</button>
         </div>
         <div class="exercise-feedback" id="en2-fb"></div>
       </div>
 
       <div class="exercise-item" id="en3">
-        <div class="exercise-sentence">It was <span class="exercise-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> indulgence, fully justified by the circumstances. <br><small style="color:var(--text-dim); font-size:0.75rem;">(an / a — which article before indulgence?)</small></div>
+        <div class="exercise-sentence">In the evening I'll <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:80px;">&nbsp;</span> the open threads in my work project. <br><small style="color:var(--text-dim);font-size:0.75rem;">(solve / resolve — which is more natural here?)</small></div>
         <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type the missing word..." id="en3-input">
-          <button class="check-btn" onclick="checkEn('en3','an','An before vowel sounds — indulgence starts with a vowel sound (i). Rule: the article is determined by sound, not spelling.')">Check</button>
+          <input class="exercise-input" placeholder="type here..." id="en3-in">
+          <button class="check-btn" onclick="chk('en3','resolve','Resolve = bring a situation to a conclusion through judgement. Solve = find the one correct answer to a problem. Threads require decisions, not calculations.')">Check</button>
         </div>
         <div class="exercise-feedback" id="en3-fb"></div>
       </div>
@@ -698,59 +330,47 @@
   <!-- READ -->
   <section class="section read" id="read">
     <div class="section-eyebrow">Layer 4 · 20 min</div>
-    <div class="section-title" style="color: var(--parchment-text);">The Accidental Tour of Wielkopolska</div>
+    <div class="section-title" style="color:var(--parchment-text);">The Engine and the Instance</div>
 
-    <p>There is a particular kind of Friday that arrives with a plan and departs without it. You board a train with a seat reservation, a novel, and the quiet expectation of arriving somewhere. Then the overhead wire at Opalenica snaps, and the plan dissolves into something more interesting: an improvised geography of western Poland, conducted at the pace of a replacement bus that hasn't arrived yet.</p>
+    <p>There is a distinction in software architecture between the general and the particular — between a system that encodes rules and a system that holds data. The rules tell you how to behave; the data tells you who you are. A well-designed engine contains only the former. Everything particular — the specific vocabulary word learned on a Tuesday in Berlin, the diary entry written on a delayed train between Rzepin and Świebodzin — belongs to the instance.</p>
 
-    <p>The Poznań–Berlin rail corridor, line number 3, is one of the oldest international rail routes in Central Europe. Built in the Prussian era, it connected the ports of the Oder basin to the industrial interior. Today it carries the Berlin-Warszawa-Express — sleek, fast, punctual in ordinary times — and also the ghost of every infrastructure decision made or deferred since 1945. The overhead wire, the <em>Oberleitung</em>, runs the full length. When it breaks, everything stops.</p>
+    <p>This is the idea behind the alone-engine. The engine is not a diary system for Michał. It is a specification for how diary systems work. The difference sounds abstract until you try to build a second instance — a work version, say, or a version for someone else — and discover that the first version has accidentally encoded its own particular context into what should have been general rules. At that point, the engine is not an engine. It is a snapshot of one deployment, dressed up as a principle.</p>
 
-    <p>Świebodzin is a small town about halfway between Rzepin and Poznań. It is best known to tourists for its enormous statue of Christ the King, erected in 2010, which briefly held the world record for height. It is known to train passengers stranded by broken traction systems for something else entirely: for being the place where decisions are made, or rather, the place where you wait for them.</p>
+    <p>The nine metatypes — learn, practice, routine, reflect, track, act, surface, index, tend — were designed to be instance-agnostic. But instance-agnostic is a property that must be tested, not assumed. The test is simple: can you describe each metatype without using any noun that belongs to a specific instance? <em>Learn</em> is a behaviour, not a vocabulary file. <em>Track</em> is a pattern, not a KPI spreadsheet. <em>Reflect</em> is a mode, not a diary entry.</p>
 
-    <p>There is a German word for what happened next: <em>Umweg</em>. The long way around. The train reversed to Rzepin, then north toward Szczecin — a city you hadn't planned to see on a Friday evening in June. From Szczecin, east along the Baltic coast corridor, then south again to Poznań. A journey that should have taken ninety minutes took most of an evening. The WARS restaurant car, that peculiar Polish institution of hot food on moving rails, served schabowy and dill potatoes somewhere in Pomerania.</p>
+    <p>Today's use-case mapping is the first real test. You will take each metatype and ask: what does this look like in alone-personal? What does it look like in alone-work? Where do the answers differ? Where they differ, the instance is doing something the engine cannot prescribe. Where they are the same, the engine speaks.</p>
 
-    <p>What is notable is not the disruption itself — infrastructure fails; the overhead wire at Opalenica has broken before and will again — but what the disruption makes possible. Attention, displaced from its intended object, falls on what is actually present: the passing landscape of Wielkopolska through a train window at dusk, the sound of Polish spoken on a platform in Rzepin, the specific weight of waiting for a decision that someone else will make.</p>
+    <p>The practical work of building Ania's app will sharpen this further. A second instance, even a simple one, immediately surfaces the assumptions you didn't know you'd made. She is not you. Her work is not your work. Whatever the engine gives her must be genuinely hers — not a copy of your structure with her name on it.</p>
 
-    <p>The German you practised in those hours — <em>warten auf</em>, <em>umsteigen</em>, <em>die Entscheidung</em> — arrived in a context that will make it difficult to forget. Language learned from disruption tends to stick.</p>
+    <p>This is the work of the solstice Sunday: drawing a line between what is general and what is particular, in a project whose whole purpose is to hold the particular carefully.</p>
   </section>
 
-  <!-- STEELWATCH -->
-  <section class="section" id="steelwatch">
-    <div class="section-eyebrow">Layer 4 · Steelwatch</div>
-    <div class="section-title">SSAB Luleå — What to Know Today</div>
+  <!-- ENGINE SECTION (replaces Steelwatch today) -->
+  <section class="section" id="engine">
+    <div class="section-eyebrow">Layer 4 · alone-engine</div>
+    <div class="section-title">Engine Thinking — Three Questions for Today</div>
 
-    <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:1.5rem;">Three learnings from the Steelwatch repo, drawn from the most recent tracker entries and open threads. Each one connects to a question worth carrying.</p>
+    <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:1.5rem;">Three questions to hold while doing the use-case mapping. Not to answer now — to let them do their work while you build.</p>
 
-    <div class="steel-card">
-      <div class="steel-card-label">Thread T21 · Watch item</div>
-      <div class="steel-card-title">The LKAB DRI timing gap is the critical path risk</div>
-      <div class="steel-card-body">
-        LKAB's Gällivare DRI plant received its environmental permit in June 2026, but power line construction won't start until end-2026. LKAB's CEO has already flagged a possible 2028 slip. SSAB's mill starts end-2029. If DRI supply is late, SSAB's scrap-first commissioning phase extends — delaying the moment when fossil-free steel actually flows and premium revenues begin.
-      </div>
-      <span class="steel-tag tag-confirmed">confirmed permit</span>
-      <span class="steel-tag tag-risk">supply risk</span>
-      <div class="steel-question">If LKAB slips to 2028, does SSAB have a DRI bridge strategy — or does the ramp-up simply slow down?</div>
+    <div class="engine-card">
+      <div class="engine-card-label">Use-case boundary</div>
+      <div class="engine-card-title">What can the engine prescribe, and what must the instance decide?</div>
+      <div class="engine-card-body">The engine can say "a learn entry has a topic, a trigger, and a memory hook." It cannot say "the topic is German vocabulary." The instance decides what is learned. The engine decides how learning is structured. Draw that line for each of the nine metatypes today.</div>
+      <div class="engine-q">For each metatype: can you describe it fully without naming a single piece of instance-specific content?</div>
     </div>
 
-    <div class="steel-card">
-      <div class="steel-card-label">Tracker · June 2026</div>
-      <div class="steel-card-title">Malmporten dredging awarded — but the deep port isn't ready at mill start</div>
-      <div class="steel-card-body">
-        Boskalis + Van Oord JV won the SEK 5.7 billion Malmporten dredging contract. Dredging runs spring 2027 through summer 2029, completing 15 August 2030. The SSAB mill commissioning begins end-2029. That leaves a ~9-month overlap where the mill is starting up but the deep harbour (14.7m draught) isn't finished. Interim port depth constraints will affect how large vessels can be loaded during ramp-up.
-      </div>
-      <span class="steel-tag tag-confirmed">contract awarded</span>
-      <span class="steel-tag tag-risk">logistics constraint</span>
-      <div class="steel-question">What's SSAB's plan for outbound shipments during the 2029–2030 overlap? Smaller vessels, partial loads, or Borlänge as interim buffer?</div>
+    <div class="engine-card">
+      <div class="engine-card-label">Work instance</div>
+      <div class="engine-card-title">What does alone-work need that alone-personal doesn't — and vice versa?</div>
+      <div class="engine-card-body">alone-personal has language coaching, food logging, Steelwatch, CrossFit KPIs. alone-work has Gemini, work threads, professional register. The <em>tend</em> metatype — which shapes the engine itself — lives only in the engine repo. Both instances flag gaps upward. The work instance probably needs a lighter <em>reflect</em> structure and a heavier <em>act</em> structure. Check that assumption today.</div>
+      <div class="engine-q">Which metatypes feel different across personal/work — and is that difference instance data, or does it reveal an engine gap?</div>
     </div>
 
-    <div class="steel-card">
-      <div class="steel-card-label">Technology · Open thread T23</div>
-      <div class="steel-card-title">Customer qualification is a parallel workstream, not a sequel to commissioning</div>
-      <div class="steel-card-body">
-        HARDOX and STRENX qualification by automotive and defence customers takes 18–36 months. Starting Phase 1 lab qualification in Q1 2029 (during cold commissioning) rather than Q3 2030 (after production stabilises) could be worth €200–400m in earlier premium revenue. The open question: does SSAB's project organisation treat qualification as a parallel stream, or as something that happens after the mill works? This is the kind of decision made quietly, years before anyone notices the difference.
-      </div>
-      <span class="steel-tag tag-open">open thread T23</span>
-      <span class="steel-tag tag-confirmed">revenue timing</span>
-      <div class="steel-question">Is there any public signal in SSAB's customer communications about pre-qualification sample programmes starting before 2029?</div>
+    <div class="engine-card">
+      <div class="engine-card-label">Ania's app</div>
+      <div class="engine-card-title">What does she actually need — not what you have?</div>
+      <div class="engine-card-body">The temptation is to give Ania a copy of alone-personal with her name in it. The better question is: what problem is she trying to solve? If the engine is well-designed, her instance should emerge from her use cases, not from yours. Scope before building. A ten-minute conversation about what she wants will save three hours of rework.</div>
+      <div class="engine-q">Before creating any files: what are Ania's three core use cases?</div>
     </div>
   </section>
 
@@ -760,79 +380,42 @@
     <div class="section-title">Deeper</div>
 
     <div class="deeper-block">
-      <div class="deeper-label">Goal check — German to B2/conversational</div>
-      <p style="font-size:0.9rem; margin-bottom:0.8rem;">You used <em>um...zu</em> today without being prompted. This is a subordinating construction that most B1 learners avoid — it requires holding the main clause verb in place while inserting a purpose infinitive at the end. You placed the comma correctly. You placed <em>zurück</em> correctly.</p>
-      <p style="font-size:0.9rem; margin-bottom:0.8rem;">The Goethe-Institut intensive starts in August. You have roughly six weeks. The gap between where you are and where you need to be for placement into a strong B1/B2 group is mostly <strong>consistency</strong> — not new grammar, but fluency with what you already know.</p>
-      <p style="font-size:0.9rem; color:var(--text-dim);">One thing worth doing before the course: write one paragraph in German each day, about anything — the weather, what you ate, what you noticed. Not corrected in advance. Just produced. The placement test rewards spontaneous production, not memorised patterns.</p>
+      <div class="deeper-label">Goal check — Work lean</div>
+      <p style="font-size:0.9rem; margin-bottom:0.8rem;">The lean principle: generate no new chaos while sorting existing chaos. Today's plan touches three different systems: alone-engine, Ania's app, and work Gemini threads. That's three contexts in one day.</p>
+      <p style="font-size:0.9rem; color:var(--text-dim);">Worth asking: does building Ania's app today generate new chaos, or resolve something already open? If she's been waiting for it, it resolves. If it's a new idea that just surfaced, it might be worth scheduling rather than adding to today's plate.</p>
     </div>
 
     <div class="deeper-block" style="margin-top:1rem;">
-      <div class="deeper-label">Reflection — the train as classroom</div>
-      <p style="font-size:0.9rem;">Today's session happened entirely in transit — no desk, no notes, just a phone and a disrupted train. You practised German by living a German-language problem: a broken Oberleitung, a decision to wait, an Umweg. The vocabulary arrived with experience attached. That's the best kind of learning. It doesn't evaporate.</p>
+      <div class="deeper-label">German — six weeks to Goethe-Institut</div>
+      <p style="font-size:0.9rem; margin-bottom:0.8rem;">The intensive course starts August 3. Six weeks. The placement test (<em>Einstufungstest</em>) determines which group you enter. The gap between where you are and a strong B1/B2 placement is not grammar — it's fluency under time pressure.</p>
+      <p style="font-size:0.9rem; color:var(--text-dim);">The train sessions this weekend — writing three German sentences about a live disruption, under the slight pressure of a delayed journey — are closer to what the test asks for than any drill. Keep doing that. One spontaneous German paragraph per day.</p>
     </div>
   </section>
-
 </main>
 
 <script>
-  // Rail scroll tracking
-  const sections = ['pulse','mind','word','coach','german','exercises','read','steelwatch','deeper'];
+  const sections = ['pulse','mind','word','coach','german','exercises','read','engine','deeper'];
   const dots = document.querySelectorAll('.rail-dot');
-
-  function scrollTo(id) {
-    document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});
-  }
-
+  function goTo(id) { document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'}); }
   window.addEventListener('scroll', () => {
-    let current = 0;
-    sections.forEach((id, i) => {
-      const el = document.getElementById(id);
-      if (el && window.scrollY >= el.offsetTop - 200) current = i;
-    });
-    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    let cur = 0;
+    sections.forEach((id,i) => { const el = document.getElementById(id); if(el && window.scrollY >= el.offsetTop-200) cur=i; });
+    dots.forEach((d,i) => d.classList.toggle('active', i===cur));
   });
-
-  // Exercise checking
-  function checkDe(id, answer, explanation) {
-    const input = document.getElementById(id + '-input');
-    const fb = document.getElementById(id + '-fb');
-    const val = input.value.trim().toLowerCase();
-    const correct = answer.toLowerCase();
-    // also accept kaputt for beschädigt
-    const isCorrect = val === correct || (id === 'de4' && val === 'kaputt');
-    input.classList.remove('correct','wrong');
-    input.classList.add(isCorrect ? 'correct' : 'wrong');
-    fb.className = 'exercise-feedback ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
-    fb.style.display = 'block';
-    fb.innerHTML = isCorrect
-      ? '✓ Correct. ' + explanation
-      : '✗ The answer is <strong>' + answer + '</strong>. ' + explanation;
+  function chk(id, answer, explanation) {
+    const inp = document.getElementById(id+'-in');
+    const fb = document.getElementById(id+'-fb');
+    const val = inp.value.trim().toLowerCase();
+    const ans = answer.toLowerCase();
+    const ok = val === ans || (id==='de3' && (val==='fuhren weiter' || val==='fuhren...weiter'));
+    inp.classList.remove('correct','wrong');
+    inp.classList.add(ok?'correct':'wrong');
+    fb.className = 'exercise-feedback '+(ok?'correct-fb':'wrong-fb');
+    fb.style.display='block';
+    fb.innerHTML = ok ? '✓ Correct. '+explanation : '✗ Answer: <strong>'+answer+'</strong>. '+explanation;
   }
-
-  function checkEn(id, answer, explanation) {
-    const input = document.getElementById(id + '-input');
-    const fb = document.getElementById(id + '-fb');
-    const val = input.value.trim().toLowerCase();
-    const correct = answer.toLowerCase();
-    const isCorrect = val === correct || val === 'delayed' && id === 'en2'; // accept both for en2
-    const actualCorrect = id === 'en2' ? 'stranded' : answer;
-    input.classList.remove('correct','wrong');
-    input.classList.add(val === correct ? 'correct' : 'wrong');
-    fb.className = 'exercise-feedback ' + (val === correct ? 'correct-fb' : 'wrong-fb');
-    fb.style.display = 'block';
-    fb.innerHTML = val === correct
-      ? '✓ Correct. ' + explanation
-      : '✗ The answer is <strong>' + answer + '</strong>. ' + explanation;
-  }
-
-  // Enter key for inputs
-  document.querySelectorAll('.exercise-input').forEach(input => {
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        const btn = input.nextElementSibling;
-        if (btn) btn.click();
-      }
-    });
+  document.querySelectorAll('.exercise-input').forEach(inp => {
+    inp.addEventListener('keydown', e => { if(e.key==='Enter') inp.nextElementSibling.click(); });
   });
 </script>
 </body>
