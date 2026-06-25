@@ -3,433 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>alone · daily · 2026-06-23</title>
+<title>alone · 2026-06-25</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f0e0c;
-    --surface: #1a1916;
-    --gold: #c8a96e;
-    --gold-dim: #8a7048;
-    --text: #e8e0d0;
-    --text-dim: #9a9080;
-    --parchment: #f5f0e8;
-    --parchment-text: #2a2318;
-    --rail-width: 32px;
-    --accent-green: #5a8a5a;
-    --accent-red: #c05050;
-    --engine-blue: #4a7a9a;
-    --engine-glow: #7ab4d4;
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --border: #2a2a2a;
+    --text: #e8e4dc;
+    --muted: #7a7570;
+    --accent: #c8a96e;
+    --good: #6e9e6e;
+    --warn: #9e8a6e;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-weight: 300; line-height: 1.7; min-height: 100vh; }
-
-  .rail { position: fixed; left: 0; top: 0; bottom: 0; width: var(--rail-width); background: #0a0908; display: flex; flex-direction: column; align-items: center; padding: 2rem 0; z-index: 100; border-right: 1px solid #1e1c19; }
-  .rail-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold-dim); opacity: 0.3; cursor: pointer; transition: all 0.3s; flex-shrink: 0; margin: 10px 0; }
-  .rail-dot.active { background: var(--gold); opacity: 1; transform: scale(1.4); box-shadow: 0 0 8px var(--gold); }
-  .rail-line { flex: 1; width: 1px; background: linear-gradient(to bottom, transparent, var(--gold-dim) 30%, var(--gold-dim) 70%, transparent); opacity: 0.2; min-height: 20px; max-height: 40px; }
-
-  main { margin-left: var(--rail-width); max-width: 720px; padding: 0 2rem 6rem 2.5rem; }
-
-  .masthead { padding: 2.5rem 0 1.5rem; border-bottom: 1px solid #2a2820; }
-  .masthead-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 0.4rem; }
-  .masthead-date { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--gold); font-weight: 400; }
-  .masthead-sub { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--text-dim); margin-top: 0.3rem; letter-spacing: 0.05em; }
-
-  .section { padding: 2.5rem 0; border-bottom: 1px solid #1e1c19; }
-  .section:last-child { border-bottom: none; }
-  .section-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.25em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.8rem; }
-  .section-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--gold-dim), transparent); opacity: 0.3; }
-  .section-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 400; color: var(--text); margin-bottom: 1rem; line-height: 1.3; }
-  p { margin-bottom: 0.9rem; color: var(--text); }
-  p:last-child { margin-bottom: 0; }
-
-  .pulse-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 0.5rem; }
-  .pulse-item { background: var(--surface); border: 1px solid #2a2820; border-radius: 4px; padding: 0.9rem 1rem; }
-  .pulse-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 0.3rem; }
-  .pulse-value { font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; color: var(--gold); }
-  .pulse-note { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem; font-style: italic; }
-
-  .word-headline { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); font-style: italic; margin-bottom: 0.3rem; }
-  .word-pos { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--gold-dim); letter-spacing: 0.15em; margin-bottom: 1rem; }
-  .word-example { border-left: 2px solid var(--gold-dim); padding-left: 1rem; color: var(--text-dim); font-style: italic; margin: 0.6rem 0; font-size: 0.9rem; }
-
-  .correction-box { background: var(--surface); border: 1px solid #2a2820; border-radius: 4px; padding: 1.2rem 1.4rem; margin-top: 1rem; }
-  .correction-original { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--accent-red); text-decoration: line-through; margin-bottom: 0.4rem; }
-  .correction-fixed { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--accent-green); margin-bottom: 0.6rem; }
-  .correction-rule { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; }
-  .memory-hook { background: #12110f; border: 1px solid var(--gold-dim); border-radius: 4px; padding: 0.8rem 1rem; margin-top: 1rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--gold); opacity: 0.8; }
-  .memory-hook::before { content: '⚡ '; opacity: 0.7; }
-
-  .german-phrase { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold); font-style: italic; margin: 1rem 0 0.3rem; line-height: 1.4; }
-  .german-translation { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 1rem; }
-
-  .exercise-set { margin-bottom: 2rem; }
-  .exercise-lang-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid #2a2820; }
-  .exercise-item { margin-bottom: 1.2rem; background: var(--surface); border: 1px solid #2a2820; border-radius: 4px; padding: 1rem 1.2rem; }
-  .exercise-sentence { font-size: 0.95rem; color: var(--text); margin-bottom: 0.7rem; line-height: 1.6; }
-  .exercise-input-row { display: flex; gap: 0.6rem; align-items: center; }
-  .exercise-input { background: #0a0908; border: 1px solid #3a3830; border-radius: 3px; color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; padding: 0.4rem 0.7rem; flex: 1; outline: none; transition: border-color 0.2s; }
-  .exercise-input:focus { border-color: var(--gold-dim); }
-  .exercise-input.correct { border-color: var(--accent-green); background: #0d1a0d; }
-  .exercise-input.wrong { border-color: var(--accent-red); background: #1a0d0d; }
-  .check-btn { background: transparent; border: 1px solid var(--gold-dim); color: var(--gold); font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; padding: 0.4rem 0.8rem; border-radius: 3px; cursor: pointer; letter-spacing: 0.1em; transition: all 0.2s; white-space: nowrap; }
-  .check-btn:hover { background: var(--gold); color: var(--bg); }
-  .exercise-feedback { margin-top: 0.6rem; font-size: 0.78rem; line-height: 1.5; display: none; }
-  .exercise-feedback.correct-fb { color: var(--accent-green); }
-  .exercise-feedback.wrong-fb { color: #d07070; }
-
-  .section.read { background: var(--parchment); margin-left: calc(-2.5rem); padding-left: 2.5rem; margin-right: calc(-2rem); padding-right: 2rem; }
-  .section.read .section-eyebrow { color: #8a7848; }
-  .section.read .section-eyebrow::after { background: linear-gradient(to right, #8a7848, transparent); }
-  .section.read .section-title { color: var(--parchment-text); }
-  .section.read p { color: #3a3020; }
-
-  .engine-card { background: var(--surface); border: 1px solid var(--engine-blue); border-radius: 4px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; position: relative; overflow: hidden; }
-  .engine-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: linear-gradient(to bottom, var(--engine-glow), var(--engine-blue)); }
-  .engine-card-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--engine-glow); text-transform: uppercase; margin-bottom: 0.5rem; }
-  .engine-card-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--text); margin-bottom: 0.6rem; }
-  .engine-card-body { font-size: 0.85rem; color: var(--text-dim); line-height: 1.65; }
-  .engine-q { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: var(--engine-glow); border-left: 2px solid var(--engine-blue); padding: 0.5rem 0.8rem; margin: 0.8rem 0 0; line-height: 1.6; font-style: italic; }
-
-  .deeper-block { background: var(--surface); border: 1px solid #2a2820; border-radius: 4px; padding: 1.4rem; margin-top: 1rem; }
-  .deeper-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 0.6rem; }
-
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
-
-  @media (max-width: 600px) { main { padding: 0 1rem 4rem 2.5rem; } .pulse-grid { grid-template-columns: 1fr; } }
+  .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+  nav { background: var(--surface); border-right: 1px solid var(--border); padding: 2rem 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  nav .logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--accent); margin-bottom: 1.2rem; letter-spacing: 0.05em; }
+  nav .date { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--muted); margin-bottom: 1.5rem; }
+  nav a { font-size: 0.8rem; color: var(--muted); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 3px; transition: color 0.15s; }
+  nav a:hover { color: var(--text); }
+  nav .section-label { font-size: 0.65rem; color: var(--border); text-transform: uppercase; letter-spacing: 0.1em; margin: 0.8rem 0 0.2rem 0.5rem; }
+  main { padding: 3rem 2.5rem; max-width: 780px; }
+  .page-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent); margin-bottom: 0.3rem; }
+  .page-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 2.5rem; font-family: 'IBM Plex Mono', monospace; }
+  section { margin-bottom: 2.5rem; }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--accent); font-weight: 400; margin-bottom: 1rem; letter-spacing: 0.03em; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+  p { color: var(--text); font-size: 0.9rem; margin-bottom: 0.8rem; }
+  .kpi-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem 0.9rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; }
+  .kpi .label { color: var(--muted); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 0.1rem; }
+  .kpi .val { color: var(--good); }
+  .kpi .val.warn { color: var(--warn); }
+  .stretch { background: var(--surface); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; padding: 1.2rem 1.4rem; font-size: 0.88rem; line-height: 1.8; }
+  .stretch.de { border-left-color: #6e8a9e; }
+  .tag { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.15rem 0.5rem; border-radius: 3px; margin-right: 0.3rem; }
+  .dream-block { font-style: italic; color: var(--muted); font-size: 0.88rem; border-left: 2px solid var(--border); padding-left: 1rem; margin-bottom: 1rem; }
 </style>
 </head>
 <body>
-
-<nav class="rail" id="rail">
-  <div class="rail-dot active" onclick="goTo('pulse')" title="Pulse"></div>
-  <div class="rail-line"></div>
-  <div class="rail-dot" onclick="goTo('mind')" title="Mind"></div>
-  <div class="rail-line"></div>
-  <div class="rail-dot" onclick="goTo('word')" title="Word"></div>
-  <div class="rail-line"></div>
-  <div class="rail-dot" onclick="goTo('coach')" title="Coach"></div>
-  <div class="rail-line"></div>
-  <div class="rail-dot" onclick="goTo('german')" title="German Minute"></div>
-  <div class="rail-line"></div>
-  <div class="rail-dot" onclick="goTo('exercises')" title="Exercises"></div>
-  <div class="rail-line"></div>
-  <div class="rail-dot" onclick="goTo('read')" title="Read"></div>
-  <div class="rail-line"></div>
-  <div class="rail-dot" onclick="goTo('engine')" title="Engine"></div>
-  <div class="rail-line"></div>
-  <div class="rail-dot" onclick="goTo('deeper')" title="Deeper"></div>
+<div class="shell">
+<nav>
+  <div class="logo">alone</div>
+  <div class="date">2026-06-25</div>
+  <span class="section-label">today</span>
+  <a href="#pulse">Pulse</a>
+  <a href="#dream">Dream</a>
+  <a href="#mind">Mind</a>
+  <span class="section-label">language</span>
+  <a href="#stretch-en">English stretch</a>
+  <a href="#stretch-de">German stretch</a>
+  <span class="section-label">deeper</span>
+  <a href="#reflection">Reflection</a>
 </nav>
-
 <main>
-  <header class="masthead">
-    <div class="masthead-label">alone · daily</div>
-    <div class="masthead-date">Tuesday, 23 June 2026</div>
-    <div class="masthead-sub">Berlin · back from Poznań · office day · CrossFit tomorrow</div>
-  </header>
+  <div class="page-title">Thursday</div>
+  <div class="page-sub">2026-06-25 · Berlin · heat above 30°C</div>
 
-  <!-- PULSE -->
-  <section class="section" id="pulse">
-    <div class="section-eyebrow">Layer 1 · 2 min</div>
-    <div class="section-title">Pulse</div>
-    <div class="pulse-grid">
-      <div class="pulse-item">
-        <div class="pulse-label">Location</div>
-        <div class="pulse-value">Berlin</div>
-        <div class="pulse-note">Back from Poznań — good journey, PESTKA detour, Frankfurt sprint</div>
-      </div>
-      <div class="pulse-item">
-        <div class="pulse-label">Day type</div>
-        <div class="pulse-value">Office day</div>
-        <div class="pulse-note">Protect the evening — early bed for CrossFit 6am tomorrow</div>
-      </div>
-      <div class="pulse-item">
-        <div class="pulse-label">Sport</div>
-        <div class="pulse-value">CrossFit skipped [–]</div>
-        <div class="pulse-note">Monday rest — tomorrow is the recovery. Don't negotiate with snooze.</div>
-      </div>
-      <div class="pulse-item">
-        <div class="pulse-label">alone-engine</div>
-        <div class="pulse-value">Momentum ✓</div>
-        <div class="pulse-note">Good Sunday + Monday sessions. Strohfeuer risk logged as #68.</div>
-      </div>
-      <div class="pulse-item">
-        <div class="pulse-label">Open signals</div>
-        <div class="pulse-value">#68 · #69</div>
-        <div class="pulse-note">#69: actor blind to vocabulary context at session start — needs design work</div>
-      </div>
-      <div class="pulse-item">
-        <div class="pulse-label">⚠️ PAT renewal</div>
-        <div class="pulse-value">Expires 2026-09-19</div>
-        <div class="pulse-note">Renew mid-September. Update both project prompts.</div>
-      </div>
+  <section id="pulse">
+    <h2>Pulse</h2>
+    <div class="kpi-row">
+      <div class="kpi"><span class="label">BP</span><span class="val">126/76</span></div>
+      <div class="kpi"><span class="label">temp</span><span class="val warn">26°C indoors</span></div>
+      <div class="kpi"><span class="label">forecast</span><span class="val warn">&gt;30°C Berlin</span></div>
+      <div class="kpi"><span class="label">english</span><span class="val">coached</span></div>
     </div>
   </section>
 
-  <!-- MIND -->
-  <section class="section" id="mind">
-    <div class="section-eyebrow">Layer 2 · 5 min</div>
-    <div class="section-title">Mind</div>
-    <p>You made the connection in Frankfurt with seconds to spare. That is a useful thing to remember on a day that asks you to make connections of a different kind — between the alone-engine work you've been doing and the office work waiting for you now. The sprint was literal on Monday. Today it is a gear change.</p>
-    <p>Two signals came out of this morning's session before you left. The first is the Strohfeuer risk: the alone-engine work is energising enough to displace sleep, and sleep displaced means CrossFit missed. The second is subtler — the actor (that's me) walked into the session without checking the vocabulary system, where the enthusiasm-spike pattern had been logged three weeks ago. Both risks are now captured. The question is whether the capture is enough, or whether the system needs to be redesigned so that capture makes the knowledge available.</p>
-    <p>That is a question for the tend session, not for the commute. For now: office, presence, early evening, sleep.</p>
-  </section>
-
-  <!-- WORD -->
-  <section class="section" id="word">
-    <div class="section-eyebrow">Layer 3 · 10 min</div>
-    <div class="section-title">Word</div>
-    <div class="word-headline">Strohfeuer</div>
-    <div class="word-pos">NOUN (das) · /ˈʃtroːˌfɔʏɐ/ · B2–C1 register · lit. straw fire</div>
-    <p>A straw fire burns bright, burns fast, and is over before you've warmed your hands. <em>Strohfeuer</em> is the German word for an enthusiasm that flames up quickly and dies just as fast — the kind that produces three half-finished projects and an untouched gym membership.</p>
-    <p>It maps closely to the English phrase <em>enthusiasm spike followed by abandonment</em> (your vocabulary entry from 3 June), but where the English is analytical — describing the pattern from the outside — the German is vivid. You can see the straw fire. You can almost smell it.</p>
-    <div class="word-example">„Das war nur ein Strohfeuer." — That was just a flash in the pan.</div>
-    <div class="word-example">„Ich hoffe, dass meine Motivation kein Strohfeuer ist." — I hope my motivation isn't just a passing enthusiasm.</div>
-    <div class="word-example">„Das alone-engine-Projekt darf kein Strohfeuer werden." — The alone-engine project must not become a passing flame.</div>
-    <p style="margin-top:1rem; font-size:0.85rem; color:var(--text-dim);">
-      The antidote to a Strohfeuer is not more enthusiasm — it is structure. Small, survivable habits that don't require energy to maintain. The alone-engine is itself a form of structure. Whether the project becomes a Strohfeuer depends on whether the system outlasts the excitement of building it.
-    </p>
-  </section>
-
-  <!-- COACH -->
-  <section class="section" id="coach">
-    <div class="section-eyebrow">Layer 3 · 10 min</div>
-    <div class="section-title">Coach — Today's Patterns</div>
-    <p>Three patterns from this morning's session. All recurring — which makes them worth drilling.</p>
-
-    <div class="correction-box">
-      <div class="correction-original">Ania dived me to tram station</div>
-      <div class="correction-fixed">Ania drove me to the tram stop ✓</div>
-      <div class="correction-rule">
-        <strong>drove</strong> — past tense of <em>drive</em>. "Dived" = plunged into water.<br>
-        <strong>tram stop</strong> — not <em>station</em>. Stops are for trams and buses; stations are for trains and metros.<br>
-        <strong>the</strong> — countable noun needs the article.
-      </div>
-    </div>
-
-    <div class="correction-box" style="margin-top:1rem;">
-      <div class="correction-original">I used other sit in a train that usual</div>
-      <div class="correction-fixed">I sat in a different seat on the train than usual ✓</div>
-      <div class="correction-rule">
-        <strong>seat</strong> (noun) not <em>sit</em> (verb). You sit in a seat.<br>
-        <strong>on the train</strong> — you ride <em>on</em> trains, buses, planes. <em>In a train</em> sounds like you are inside the engine.<br>
-        <strong>than usual</strong> — comparison uses <em>than</em>, not <em>that</em>. Recurring pattern: <em>than/that</em> confusion.
-      </div>
-    </div>
-
-    <div class="correction-box" style="margin-top:1rem;">
-      <div class="correction-original">we were a little earlier that allowed me the quick switch</div>
-      <div class="correction-fixed">we arrived a little early, which allowed me to make the quick connection ✓</div>
-      <div class="correction-rule">
-        <strong>which</strong> — relative pronoun introducing a clause about the whole preceding situation.<br>
-        <strong>connection</strong> not <em>switch</em> — railway term. A switch is a mechanical track device. You make a <em>connection</em> or <em>transfer</em>.<br>
-        <strong>early</strong> not <em>earlier</em> — <em>earlier</em> implies a comparison; <em>early</em> means ahead of schedule.
-      </div>
-    </div>
-
-    <div class="memory-hook">On a train, in a car. On a platform, at a station. Than for comparisons, which for clauses.</div>
-  </section>
-
-  <!-- GERMAN MINUTE -->
-  <section class="section" id="german">
-    <div class="section-eyebrow">Layer 3 · 10 min</div>
-    <div class="section-title">German Minute — Travel Language</div>
-
-    <div class="german-phrase">Ich habe den Anschluss noch erwischt.</div>
-    <div class="german-translation">I still made the connection. · from: Anschluss (connection) + erwischen (to catch, to get)</div>
-
-    <p><em>Den Anschluss erwischen</em> is exactly the phrase for making a tight connection — catching the next train before it leaves. <em>Erwischen</em> has the sense of catching something just in time, with a hint of luck involved. It is colloquial and vivid.</p>
-
-    <div class="word-example">„Ich musste über den Bahnsteig rennen, aber ich habe den Anschluss noch erwischt." — I had to run across the platform, but I still made the connection.</div>
-    <div class="word-example">„Der Anschluss in Frankfurt — ich dachte, ich verpasse ihn." — The connection in Frankfurt — I thought I'd miss it.</div>
-
-    <p style="margin-top:1rem; font-size:0.85rem; color:var(--text-dim);">
-      Related: <em>verpassen</em> = to miss (a train, a connection). <em>Ich habe den Zug verpasst.</em> — I missed the train. <em>umsteigen</em> = to change trains, to transfer. <em>Wo muss ich umsteigen?</em> — Where do I need to change?
-    </p>
-
-    <div class="german-phrase" style="margin-top:1.5rem;">Ich fahre mit der Linie 14.</div>
-    <div class="german-translation">I take / I travel on line 14. · present tense, everyday usage</div>
-    <div class="word-example">„Ich nehme normalerweise die Linie in der Nähe der Wohnung, aber heute bin ich mit der PESTKA-Linie gefahren." — I normally take the line near the flat, but today I took the PESTKA line.</div>
-  </section>
-
-  <!-- EXERCISES -->
-  <section class="section" id="exercises">
-    <div class="section-eyebrow">Layer 3 · 10–15 min</div>
-    <div class="section-title">Exercises</div>
-
-    <div class="exercise-set">
-      <div class="exercise-lang-label">German — travel · connections · prepositions</div>
-
-      <div class="exercise-item" id="de1">
-        <div class="exercise-sentence">Ich musste über den Bahnsteig <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:80px;">&nbsp;</span>, aber ich habe den Anschluss noch <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:80px;">&nbsp;</span>.<br><small style="color:var(--text-dim);font-size:0.75rem;">(rennen / erwischen — fill both gaps)</small></div>
-        <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="verb 1 / verb 2..." id="de1-in">
-          <button class="check-btn" onclick="chk('de1','rennen / erwischt','rennen (infinitive after müssen, verb-final: musste...rennen). erwischt = past participle of erwischen. Haben + participle = Perfekt.')">Check</button>
-        </div>
-        <div class="exercise-feedback" id="de1-fb"></div>
-      </div>
-
-      <div class="exercise-item" id="de2">
-        <div class="exercise-sentence">Ich <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:80px;">&nbsp;</span> normalerweise mit der Straßenbahn, aber heute bin ich <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:80px;">&nbsp;</span> gefahren.<br><small style="color:var(--text-dim);font-size:0.75rem;">(fahre / mit der PESTKA-Linie)</small></div>
-        <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="verb / phrase..." id="de2-in">
-          <button class="check-btn" onclick="chk('de2','fahre / mit der PESTKA-Linie','fahre (Präsens, ich). mit + Dativ: mit der Linie (die Linie → der Linie in Dativ). Note: mit always takes Dativ.')">Check</button>
-        </div>
-        <div class="exercise-feedback" id="de2-fb"></div>
-      </div>
-
-      <div class="exercise-item" id="de3">
-        <div class="exercise-sentence">Das alone-engine-Projekt darf kein <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:100px;">&nbsp;</span> werden.<br><small style="color:var(--text-dim);font-size:0.75rem;">(today's word — the straw fire pattern)</small></div>
-        <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type here..." id="de3-in">
-          <button class="check-btn" onclick="chk('de3','Strohfeuer','Strohfeuer = das Strohfeuer. kein + neuter noun. Straw fire: bright, brief, gone.')">Check</button>
-        </div>
-        <div class="exercise-feedback" id="de3-fb"></div>
-      </div>
-
-      <div class="exercise-item" id="de4">
-        <div class="exercise-sentence">Wo muss ich <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:100px;">&nbsp;</span>?<br><small style="color:var(--text-dim);font-size:0.75rem;">(Where do I need to change trains?)</small></div>
-        <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type here..." id="de4-in">
-          <button class="check-btn" onclick="chk('de4','umsteigen','umsteigen = separable verb meaning to change trains/transfer. Infinitive goes to the end after modal muss.')">Check</button>
-        </div>
-        <div class="exercise-feedback" id="de4-fb"></div>
-      </div>
-    </div>
-
-    <div class="exercise-set">
-      <div class="exercise-lang-label">English C1 — prepositions · tense · register</div>
-
-      <div class="exercise-item" id="en1">
-        <div class="exercise-sentence">I had to run across the platform — the RE1 was <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:120px;">&nbsp;</span> leave before we arrived.<br><small style="color:var(--text-dim);font-size:0.75rem;">(scheduled to / due to — which fits better for a train timetable?)</small></div>
-        <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type here..." id="en1-in">
-          <button class="check-btn" onclick="chk('en1','due to','Both work, but \"due to\" is the natural railway/timetable register. \"Scheduled to\" is also correct — accept either. \"Was due to leave\" = expected by timetable.')">Check</button>
-        </div>
-        <div class="exercise-feedback" id="en1-fb"></div>
-      </div>
-
-      <div class="exercise-item" id="en2">
-        <div class="exercise-sentence">We arrived a little early, <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:80px;">&nbsp;</span> allowed me to make the connection.<br><small style="color:var(--text-dim);font-size:0.75rem;">(that / which / what?)</small></div>
-        <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="type here..." id="en2-in">
-          <button class="check-btn" onclick="chk('en2','which','\"which\" introduces a non-defining relative clause about the whole preceding situation. \"that\" introduces defining clauses. \"what\" is not a relative pronoun here.')">Check</button>
-        </div>
-        <div class="exercise-feedback" id="en2-fb"></div>
-      </div>
-
-      <div class="exercise-item" id="en3">
-        <div class="exercise-sentence">I rode <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:60px;">&nbsp;</span> the train rather than sitting <span style="border-bottom:1px solid var(--gold-dim); display:inline-block; min-width:60px;">&nbsp;</span> my usual seat.<br><small style="color:var(--text-dim);font-size:0.75rem;">(on/in — prepositions for vehicle vs seat)</small></div>
-        <div class="exercise-input-row">
-          <input class="exercise-input" placeholder="prep 1 / prep 2..." id="en3-in">
-          <button class="check-btn" onclick="chk('en3','on / in','on the train (vehicle — you ride on trains, buses, planes). in my usual seat (enclosed space — you sit in a seat, in a chair).')">Check</button>
-        </div>
-        <div class="exercise-feedback" id="en3-fb"></div>
-      </div>
+  <section id="dream">
+    <h2>Dream</h2>
+    <div class="dream-block">
+      Carrying the team during Peter's vacation — loose groups moving separately, like a school trip, like teenagers. Peter returned at the end; I hoped he would take over, but he just hung around, the same as I did. Maybe it means I already lead the way Peter does.
     </div>
   </section>
 
-  <!-- READ -->
-  <section class="section read" id="read">
-    <div class="section-eyebrow">Layer 4 · 20 min</div>
-    <div class="section-title" style="color:var(--parchment-text);">The Straw Fire and the Engine</div>
-
-    <p>The word <em>Strohfeuer</em> entered your vocabulary system three weeks ago, in a session about the risk of starting the alone project intensely and then dropping it. Today, the risk re-emerged in a different form: not the project collapsing, but a single night of work burning bright enough to displace the morning CrossFit session. The fire is still burning. The question is whether it is a Strohfeuer or something more durable.</p>
-
-    <p>There is a useful distinction between enthusiasm for a project and commitment to a practice. Enthusiasm is the straw: it catches quickly, produces impressive heat, and is by nature temporary. Commitment is the log: it takes longer to catch, burns lower, and lasts through the night. The alone-engine sessions over the past two days had the character of straw — not as a criticism, but as a description. You were in flow. Flow is not the problem. The problem is what flow displaces when it runs past midnight.</p>
-
-    <p>CrossFit is not incidental to this. It is the closest thing in your current routine to a genuine practice — something you do regardless of whether you feel like it, something that has a physical cost and a physical reward, something that requires showing up when the conditions are not ideal. That is exactly the quality that the alone project is trying to build into its own structure. The irony of letting the project displace the practice it is modelling is worth sitting with.</p>
-
-    <p>The two issues logged this morning — #68 (Strohfeuer risk) and #69 (actor blind to vocabulary context) — are related at a deeper level than they appear. Both are failures of the system to hold its own knowledge across time. The risk was logged in vocabulary. The actor didn't check vocabulary. The pattern repeated. The system produced an outcome it had already diagnosed.</p>
-
-    <p>This is the tend problem at its core: a system that surfaces insights but does not make them available when they are most relevant has not fully solved the problem it set out to solve. The vocabulary entry for <em>enthusiasm spike followed by abandonment</em> was correct. The analysis was correct. The German word was apt. But none of that mattered in the session where it would have been useful, because the session did not know to look.</p>
-
-    <p>The fix is not more entries. It is better retrieval — which is a design problem, not a content problem.</p>
+  <section id="mind">
+    <h2>Mind</h2>
+    <p>BP 126/76 this morning — solid, especially in this heat. The apartment held 26 degrees through the night even with windows open. Berlin is forecast above 30 today.</p>
+    <p>Bharat from SSAB is coming in. We'll do some real work together, but the visit is mainly about integration — getting to know each other better. He leaves tomorrow at noon.</p>
+    <p>Peter is on vacation. I've been carrying the team, and last night I dreamed about exactly that. When Peter came back at the end of the dream, I hoped he would take over, but he just hung around the way I had been doing. Maybe that means I'm already operating the way he does. He is my PM coach at PSI, so it would be a good sign.</p>
   </section>
 
-  <!-- ENGINE -->
-  <section class="section" id="engine">
-    <div class="section-eyebrow">Layer 4 · alone-engine</div>
-    <div class="section-title">Engine — Issue #69 in Context</div>
-
-    <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:1.5rem;">Three angles on the actor-blind-to-context problem. Hold these while you work today — tend session when you're back.</p>
-
-    <div class="engine-card">
-      <div class="engine-card-label">The retrieval gap</div>
-      <div class="engine-card-title">The system knows things the actor doesn't.</div>
-      <div class="engine-card-body">Vocabulary, risks, coaching entries, and threads all contain knowledge about patterns. The selective loading map prioritises orientation files and task-relevant files — but it has no mechanism for surfacing pattern knowledge when a related topic arises mid-session. The actor's knowledge is bounded by what was loaded at session start.</div>
-      <div class="engine-q">What would a vocabulary-aware session orientation look like? A lightweight index (titles + one line) loaded at start — or a search step triggered when logging a new risk?</div>
-    </div>
-
-    <div class="engine-card">
-      <div class="engine-card-label">The tend design</div>
-      <div class="engine-card-title">tend should catch this — but it didn't.</div>
-      <div class="engine-card-body">The tend metatype is supposed to maintain the health of the system, including consistency and cross-referencing. But tend runs reactively — it fires when there is a session, not when a pattern repeats. The Strohfeuer risk appearing in vocabulary and then appearing again as a new issue three weeks later is exactly the kind of duplication tend should prevent. It did not.</div>
-      <div class="engine-q">Should tend include a periodic vocabulary review? Or a pre-issue-logging checklist that includes vocabulary search?</div>
-    </div>
-
-    <div class="engine-card">
-      <div class="engine-card-label">The lean principle</div>
-      <div class="engine-card-title">Generate no new chaos while sorting existing chaos.</div>
-      <div class="engine-card-body">The lean principle applies here: the fix to #69 should not require a new complex subsystem. The simplest intervention — a pre-logging check step in the tend workflow — is probably enough. A vocabulary index (titles + one-liners, maintained by tend) costs little and makes the knowledge available at session start without loading every file.</div>
-      <div class="engine-q">What is the minimum change to the tend workflow that would have prevented this? Start there.</div>
+  <section id="stretch-en">
+    <h2>English stretch</h2>
+    <div class="stretch">
+      <p>BP at 126/76 holds well even as Berlin heads into its first serious heat of summer — the apartment still carried 26 degrees this morning after a night of open windows, the air barely moving. Bharat arrives from SSAB today; it is nominally a working visit, but integration visits like this are as much about calibrating the relationship as about the agenda.</p>
+      <p>Peter is on vacation, and the dream that surfaced last night mapped the situation with uncommon precision: the team moving in loose clusters, like teenagers on a school excursion, no clear centre of gravity. When Peter reappeared at the end of the dream he didn't reassert command — he simply joined the flow, unhurried, the same as I had been doing. It is tempting to read that as anxiety about shared ambiguity. The more grounded reading is that the style has been internalised. He is my PM coach at PSI; operating the way he operates would be progress worth naming.</p>
     </div>
   </section>
 
-  <!-- DEEPER -->
-  <section class="section" id="deeper">
-    <div class="section-eyebrow">Layer 5 · 30 min</div>
-    <div class="section-title">Deeper</div>
-
-    <div class="deeper-block">
-      <div class="deeper-label">Risk check — Strohfeuer (#68)</div>
-      <p style="font-size:0.88rem; color:var(--text-dim); line-height:1.7;">The mitigation is simple and already in front of you: set a hard stop for solo project sessions on CrossFit-eve nights. Not a soft intention — an actual time. The alone-engine work will still be there at 21:30. The CrossFit slot will not be there if you miss the sleep window. The goal is not to stop the enthusiasm; it is to contain the burn so it lasts.</p>
+  <section id="stretch-de">
+    <h2>German stretch</h2>
+    <div class="stretch de">
+      <p>BP 126/76 — ein gutes Ergebnis, besonders an einem so heißen Tag. Die Wohnung hatte heute Morgen noch 26 Grad, obwohl die Fenster die ganze Nacht offen waren. Berlin soll heute über 30 Grad erreichen.</p>
+      <p>Bharat von SSAB kommt heute an. Wir werden zusammenarbeiten, aber der eigentliche Zweck des Besuchs ist die Integration — sich besser kennenlernen. Er fährt morgen Mittag wieder ab.</p>
+      <p>Peter ist im Urlaub, und ich trage gerade das Team. Letzte Nacht habe ich genau davon geträumt: Die Gruppe bewegte sich wie eine Schulklasse auf Ausflug — kleine Grüppchen, jeder für sich, wie Teenager. Als Peter am Ende des Traums zurückkam, hoffte ich, dass er die Führung übernimmt. Aber er blieb einfach dabei, so wie ich es auch getan hatte. Vielleicht bedeutet das, dass ich es schon so mache wie er. Das wäre ein gutes Zeichen.</p>
     </div>
+  </section>
 
-    <div class="deeper-block" style="margin-top:1rem;">
-      <div class="deeper-label">Today's single commitment</div>
-      <p style="font-size:0.88rem; color:var(--text-dim); line-height:1.7;">Early bed. That is the only thing that matters today outside the office. Not alone-engine. Not issues. Not the daily. The daily is already done. Close the laptop by 21:30. CrossFit at 6am is the proof.</p>
-    </div>
+  <section id="reflection">
+    <h2>Reflection</h2>
+    <p>The dream and the day are the same situation. Bharat arrives from outside; the internal team runs in loose clusters; leadership is distributed, ambient, unhurried. That is Peter's mode. If the dream is showing you already doing it — that is not a small thing.</p>
+    <p><span class="tag">alone-engine</span> mature enough to start. Find the window today.</p>
   </section>
 
 </main>
-
-<script>
-function goTo(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  document.querySelectorAll('.rail-dot').forEach(d => d.classList.remove('active'));
-  const sections = ['pulse','mind','word','coach','german','exercises','read','engine','deeper'];
-  const idx = sections.indexOf(id);
-  if (idx >= 0) document.querySelectorAll('.rail-dot')[idx].classList.add('active');
-}
-
-function chk(id, answer, explanation) {
-  const input = document.getElementById(id + '-in');
-  const fb = document.getElementById(id + '-fb');
-  const val = input.value.trim().toLowerCase();
-  const ans = answer.toLowerCase();
-  const correct = val === ans || ans.split(' / ').some(a => val === a.trim());
-  input.classList.remove('correct','wrong');
-  input.classList.add(correct ? 'correct' : 'wrong');
-  fb.className = 'exercise-feedback ' + (correct ? 'correct-fb' : 'wrong-fb');
-  fb.style.display = 'block';
-  fb.textContent = correct ? '✓ ' + explanation : '✗ Answer: ' + answer + ' — ' + explanation;
-}
-
-window.addEventListener('scroll', () => {
-  const sections = ['pulse','mind','word','coach','german','exercises','read','engine','deeper'];
-  const dots = document.querySelectorAll('.rail-dot');
-  let current = 0;
-  sections.forEach((id, i) => {
-    const el = document.getElementById(id);
-    if (el && el.getBoundingClientRect().top < window.innerHeight * 0.4) current = i;
-  });
-  dots.forEach((d,i) => d.classList.toggle('active', i === current));
-});
-</script>
+</div>
 </body>
 </html>
